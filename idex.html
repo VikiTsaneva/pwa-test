@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Моята PWA тест</title>
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <h1>Това е моята тестова PWA!</h1>
+  <p>Работи офлайн и може да се инсталира на устройство.</p>
+
+  <script>
+    // Регистрация на service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker регистриран!'))
+      .catch(err => console.log('Грешка: ', err));
+    }
+  </script>
+</body>
+</html>
