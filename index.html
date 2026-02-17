@@ -2,234 +2,2283 @@
 <html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4 Паркоместа - ул. Епископ Софроний, Габрово</title>
-    <!-- Manifest -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Parking Finder - Намерете свободни паркоместа</title>
+    
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""/>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <!-- Apple touch icons за iOS -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Parking Finder">
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#2c3e50">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        body, html {
+
+        /* Светла тема (по подразбиране) */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #f5f5f5;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --card-bg: #ffffff;
+            --header-bg: #ffffff;
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ffffff;
+            --border-color: #e9ecef;
+            --input-bg: #ffffff;
+            --input-border: #e9ecef;
+            --stat-bg: #f8f9fa;
+            --hover-bg: rgba(0,0,0,0.05);
+            --map-title-bg: rgba(255,255,255,0.95);
+            --status-panel-bg: rgba(255,255,255,0.98);
+            --legend-bg: rgba(255,255,255,0.95);
+            --contact-modal-bg: #ffffff;
+            --contact-info-bg: #f8f9fa;
+            --link-color: #667eea;
+            --icon-color: #667eea;
+            --status-badge-bg: #eef2f6;
+            --status-badge-text: #2c3e50;
+        }
+
+        /* Тъмна тема */
+        body.dark-theme {
+            --primary: #3498db;
+            --secondary: #667eea;
+            --accent: #e74c3c;
+            --light: #2d2d2d;
+            --dark: #1a1a1a;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --text-secondary: #cccccc;
+            --card-bg: #2d2d2d;
+            --header-bg: #2d2d2d;
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ffffff;
+            --border-color: #404040;
+            --input-bg: #3d3d3d;
+            --input-border: #404040;
+            --stat-bg: #363636;
+            --hover-bg: rgba(255,255,255,0.1);
+            --map-title-bg: rgba(45,45,45,0.95);
+            --status-panel-bg: rgba(45,45,45,0.98);
+            --legend-bg: rgba(45,45,45,0.95);
+            --contact-modal-bg: #2d2d2d;
+            --contact-info-bg: #363636;
+            --link-color: #667eea;
+            --icon-color: #667eea;
+            --status-badge-bg: #404040;
+            --status-badge-text: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Сайдбар */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .sidebar-header .logo-icon {
+            color: var(--secondary);
+            margin-right: 10px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            color: var(--sidebar-text);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--secondary);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .user-info {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-name {
+            color: white;
+        }
+
+        .user-status {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Основно съдържание */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background-color: var(--header-bg);
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 300px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-bar button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--primary);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+            height: 100%;
+        }
+
+        /* Страници */
+        .page {
+            display: none;
+            height: 100%;
+            animation: fadeIn 0.5s;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Карта - стилове от вашия код */
+        #map {
             height: 100%;
             width: 100%;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            background: #f0f0f0;
+            background: #c8e0f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1;
         }
-        
-        #map {
-            height: 100vh;
-            width: 100%;
+
+        .map-container {
+            height: 100%;
+            position: relative;
         }
-        
-        /* Заглавие */
+
+        /* Заглавие на картата */
         .map-title {
             position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 20px;
+            left: 20px;
             z-index: 1000;
-            background: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            text-align: center;
-            min-width: 250px;
+            background: var(--map-title-bg);
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            text-align: left;
+            min-width: 280px;
+            backdrop-filter: blur(8px);
+            border-left: 5px solid var(--secondary);
+            pointer-events: none;
+            transition: background-color 0.3s ease;
         }
         
         .map-title h2 {
-            color: #222;
-            font-size: 1.2rem;
-            margin-bottom: 3px;
+            color: var(--text-color);
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .map-title h2 i {
+            color: var(--secondary);
         }
         
         .map-title p {
-            color: #555;
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s ease;
         }
         
-        /* Брой на паркоместата */
-        .parking-counter {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        .map-title p i {
+            color: var(--success);
             font-size: 14px;
-            z-index: 1000;
         }
         
         /* Статус панел */
         .status-panel {
             position: absolute;
-            top: 80px;
+            top: 20px;
             right: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            background: var(--status-panel-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
             z-index: 1000;
-            min-width: 200px;
+            min-width: 260px;
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            pointer-events: none;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
         .status-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .status-title i {
+            color: var(--secondary);
         }
         
         .status-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
-            padding: 5px 0;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: all 0.2s;
         }
         
         .spot-number {
-            font-weight: bold;
-            color: #333;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
         }
         
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
+        .spot-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            background: var(--status-badge-bg);
+            color: var(--status-badge-text);
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        .status-text {
+        .disabled-badge {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--secondary);
+        }
+        
+        .disabled-badge i {
             font-size: 14px;
-            font-weight: bold;
+        }
+        
+        .status-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+        
+        .status-value i {
+            font-size: 12px;
         }
         
         .status-empty {
-            color: #4CAF50;
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--success);
         }
         
         .status-occupied {
-            color: #f44336;
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--accent);
         }
         
-        .status-error {
-            color: #FF9800;
+        .status-disabled-empty {
+            background: rgba(52, 152, 219, 0.15);
+            color: var(--secondary);
+        }
+        
+        .status-disabled-occupied {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--accent);
+        }
+        
+        .status-pending {
+            background: rgba(243, 156, 18, 0.15);
+            color: var(--warning);
         }
         
         .last-update {
-            font-size: 11px;
-            color: #777;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
             text-align: center;
-            margin-top: 10px;
-            border-top: 1px solid #eee;
-            padding-top: 5px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
         
-        /* Контроли за рестарт */
-        .controls {
+        .last-update i {
+            color: var(--secondary);
+            font-size: 12px;
+        }
+        
+        /* Долен панел с информация */
+        .info-footer {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background: white;
-            padding: 10px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 1000;
+            pointer-events: none;
+        }
+        
+        .parking-stats {
+            background: var(--status-panel-bg);
+            padding: 12px 20px;
+            border-radius: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-item i {
+            font-size: 1.1rem;
+            color: var(--secondary);
+        }
+        
+        .stat-item .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .stat-item .value {
+            font-weight: 700;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+        
+        .controls {
+            background: var(--status-panel-bg);
+            padding: 8px;
+            border-radius: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            pointer-events: auto;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
         }
         
         .controls button {
-            background: #4285f4;
+            background: var(--secondary);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 10px 24px;
+            border-radius: 40px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
         .controls button:hover {
-            background: #3367d6;
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .controls button i {
+            font-size: 1rem;
+        }
+        
+        /* Легенда */
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--legend-bg);
+            padding: 12px 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            font-size: 0.85rem;
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+        
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+        }
+        
+        .legend-color.blue {
+            background: var(--secondary);
+            opacity: 0.7;
+        }
+        
+        .legend-color.green {
+            background: var(--success);
+            opacity: 0.7;
+        }
+        
+        .legend-color.red {
+            background: var(--accent);
+            opacity: 0.7;
+        }
+
+        /* Стилове за профил */
+        .profile-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .profile-header {
+            background: var(--bg-gradient);
+            padding: 30px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+
+        .profile-header-info h2 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .profile-header-info p {
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .profile-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 30px;
+            background: var(--stat-bg);
+            transition: background-color 0.3s ease;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .stat-card .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .profile-details {
+            padding: 30px;
+        }
+
+        .profile-details h3 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .profile-details h3 i {
+            color: var(--secondary);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-item label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .detail-item .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            padding: 10px;
+            background: var(--stat-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .edit-profile-btn {
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Бутони */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Стилове за вход */
+        .auth-container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .auth-header i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.2);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .auth-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .auth-header p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .auth-form {
+            padding: 30px;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .auth-form .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .auth-form .form-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .auth-form .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .auth-links a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .auth-divider span {
+            padding: 0 10px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--input-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            color: var(--text-color);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* Стилове за регистрация */
+        .register-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .register-header i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.2);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .register-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .register-header p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .register-form {
+            padding: 30px;
+        }
+
+        .register-form .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .register-form .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .register-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .register-form .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .register-form .form-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .register-form .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .terms-checkbox input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox label {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .terms-checkbox a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        /* Списъци */
+        .favorites-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .favorite-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .favorite-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorite-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .favorite-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .favorite-card p {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .favorite-card p i {
+            color: var(--secondary);
+            margin-right: 8px;
+        }
+
+        .favorite-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-free {
+            background-color: rgba(39, 174, 96, 0.15);
+            color: var(--success);
+        }
+
+        .status-busy {
+            background-color: rgba(231, 76, 60, 0.15);
+            color: var(--accent);
+        }
+
+        /* Настройки */
+        .settings-list {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .setting-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s ease;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .setting-info h4 {
+            color: var(--text-color);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .setting-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--secondary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        select {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        select option {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        /* Балонче за контакти */
+        .contact-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+            z-index: 2000;
+            animation: pulse 2s infinite;
+        }
+
+        .contact-bubble:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            }
+            50% {
+                box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+            }
+            100% {
+                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            }
+        }
+
+        /* Модален прозорец за контакти */
+        .contact-modal {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            background: var(--contact-modal-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 2001;
+            display: none;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-modal.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .modal-header h3 i {
+            color: white;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .contact-form textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .contact-info {
+            background: var(--contact-info-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .contact-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-info i {
+            color: var(--secondary);
+            width: 20px;
+        }
+
+        /* Инсталационен банер за PWA */
+        .install-banner {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 16px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 3000;
+            border: 1px solid var(--border-color);
+            max-width: 400px;
+            margin: 0 auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .install-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .install-banner-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .install-banner-text h4 {
+            color: var(--text-color);
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        .install-banner-text p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .install-banner-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .install-banner-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .install-banner-close {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Мобилна версия */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                min-height: 60px;
+                flex-direction: row;
+                position: relative;
+                z-index: 100;
+            }
+            
+            .sidebar-header {
+                padding: 10px 15px;
+                border-bottom: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                align-items: center;
+            }
+            
+            .sidebar-header h2 {
+                font-size: 1rem;
+            }
+            
+            .sidebar-header .logo-icon {
+                font-size: 1rem;
+            }
+            
+            .nav-menu {
+                display: flex;
+                padding: 0;
+                flex: 1;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            
+            .nav-menu::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .nav-item {
+                flex: 0 0 auto;
+                justify-content: center;
+                padding: 0 12px;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                min-width: 50px;
+            }
+            
+            .nav-item:hover, .nav-item.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--secondary);
+            }
+            
+            .nav-item span {
+                display: none;
+            }
+            
+            .nav-item i {
+                margin-right: 0;
+                font-size: 1.3rem;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .header {
+                padding: 10px 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+                text-align: center;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .content-area {
+                padding: 10px;
+                height: calc(100vh - 120px);
+            }
+            
+            /* Карта на мобилно */
+            .map-container {
+                height: 100%;
+                position: relative;
+            }
+            
+            .map-title {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                min-width: auto;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .map-title h2 {
+                font-size: 1.1rem;
+            }
+            
+            .map-title p {
+                font-size: 0.8rem;
+            }
+            
+            .status-panel {
+                position: relative;
+                top: auto;
+                right: auto;
+                left: auto;
+                margin-top: 15px;
+                width: 100%;
+                min-width: auto;
+                pointer-events: auto;
+            }
+            
+            .info-footer {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+            }
+            
+            .parking-stats {
+                width: 100%;
+                justify-content: space-around;
+                padding: 10px;
+            }
+            
+            .controls {
+                width: 100%;
+            }
+            
+            .controls button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .legend {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 15px;
+                width: 100%;
+            }
+            
+            /* Профил на мобилно */
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+                gap: 15px;
+            }
+            
+            .profile-avatar-large {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+            
+            .profile-header-info h2 {
+                font-size: 1.5rem;
+            }
+            
+            .profile-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 20px;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .profile-details {
+                padding: 20px;
+            }
+            
+            /* Форми на мобилно */
+            .auth-container,
+            .register-container {
+                margin: 10px;
+                width: calc(100% - 20px);
+            }
+            
+            .register-form .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .register-form .form-row .form-group {
+                width: 100%;
+            }
+            
+            /* Настройки на мобилно */
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .setting-info {
+                width: 100%;
+            }
+            
+            .toggle-switch {
+                align-self: flex-start;
+            }
+            
+            select {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            /* Любими места на мобилно */
+            .favorites-list {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .favorite-card {
+                padding: 15px;
+            }
+            
+            .favorite-name {
+                font-size: 1.1rem;
+            }
+            
+            /* Контакти на мобилно */
+            .contact-modal {
+                width: calc(100% - 20px);
+                right: 10px;
+                left: 10px;
+                bottom: 80px;
+            }
+            
+            .contact-bubble {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .install-banner {
+                bottom: 80px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+            
+            .terms-checkbox {
+                align-items: flex-start;
+            }
+            
+            .terms-checkbox input {
+                margin-top: 3px;
+            }
+            
+            .terms-checkbox label {
+                font-size: 0.9rem;
+                flex: 1;
+            }
+        }
+
+        /* Много малки екрани */
+        @media (max-width: 380px) {
+            .sidebar-header h2 {
+                font-size: 0.9rem;
+            }
+            
+            .nav-item i {
+                font-size: 1.1rem;
+            }
+            
+            .map-title {
+                padding: 8px 12px;
+            }
+            
+            .map-title h2 {
+                font-size: 1rem;
+            }
+            
+            .map-title p {
+                font-size: 0.75rem;
+            }
+            
+            .stat-item {
+                font-size: 0.8rem;
+            }
+            
+            .stat-item i {
+                font-size: 0.9rem;
+            }
+            
+            .status-item {
+                font-size: 0.85rem;
+            }
+            
+            .spot-badge {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="map"></div>
-    
-    <div class="map-title">
-        <h2>ул. "Епископ Софроний"</h2>
-        <p>Габрово • 4 паркоместа</p>
+    <div class="container">
+        <!-- Сайдбар с навигация -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-parking logo-icon"></i> Parking Finder</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active" data-page="map">
+                    <i class="fas fa-map"></i>
+                    <span>Карта на паркингите</span>
+                </div>
+                <div class="nav-item" data-page="favorites">
+                    <i class="fas fa-star"></i>
+                    <span>Любими места</span>
+                </div>
+                <div class="nav-item" data-page="profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Моят профил</span>
+                </div>
+                <div class="nav-item" data-page="login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Вход</span>
+                </div>
+                <div class="nav-item" data-page="register">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Регистрация</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Настройки</span>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">ИП</div>
+                <div>
+                    <div class="user-name">Иван Петров</div>
+                    <div class="user-status">Онлайн</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Основно съдържание -->
+        <div class="main-content">
+            <div class="header">
+                <h1 id="page-title">Карта на паркингите</h1>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Търсене на паркинг...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <!-- Карта на паркингите -->
+                <div id="map-page" class="page active">
+                    <div class="map-container">
+                        <div id="map"></div>
+                        
+                        <!-- Хедър на картата -->
+                        <div class="map-title">
+                            <h2>
+                                <i class="fas fa-parking"></i>
+                                ул. "Епископ Софроний"
+                            </h2>
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i>
+                                Габрово • 3 паркоместа (1 място за инвалиди)
+                            </p>
+                        </div>
+                        
+                        <!-- Статус панел -->
+                        <div class="status-panel">
+                            <div class="status-title">
+                                <i class="fas fa-clipboard-list"></i>
+                                Текущ статус
+                            </div>
+                            
+                            <div class="status-item" id="spot1-item">
+                                <div class="spot-number">
+                                    <span class="spot-badge disabled-badge">
+                                        <i class="fas fa-wheelchair"></i>
+                                    </span>
+                                    Място 1 (инв.)
+                                </div>
+                                <div>
+                                    <span id="status1" class="status-value status-pending">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Зареждане...
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-item" id="spot2-item">
+                                <div class="spot-number">
+                                    <span class="spot-badge">2</span>
+                                    Място 2
+                                </div>
+                                <div>
+                                    <span id="status2" class="status-value status-pending">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Зареждане...
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-item">
+                                <div class="spot-number">
+                                    <span class="spot-badge">3</span>
+                                    Място 3
+                                </div>
+                                <div>
+                                    <span id="status3" class="status-value status-empty">
+                                        <i class="fas fa-check-circle"></i>
+                                        СВОБОДНО
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="last-update">
+                                <i class="far fa-clock"></i>
+                                <span id="lastUpdate">Последна актуализация: --</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Долен панел -->
+                        <div class="info-footer">
+                            <div class="parking-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-arrows-alt"></i>
+                                    <span class="label">Размери:</span>
+                                    <span class="value">3.0m × 6.0m</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-car"></i>
+                                    <span class="label">Свободни:</span>
+                                    <span class="value" id="freeSpots">3</span>
+                                </div>
+                            </div>
+                            
+                            <div class="controls">
+                                <button onclick="manualRefresh()">
+                                    <i class="fas fa-sync-alt"></i>
+                                    Актуализирай
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Легенда -->
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color blue"></div>
+                                <span>Място за инвалиди</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color green"></div>
+                                <span>Свободно място</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color red"></div>
+                                <span>Заето място</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Любими места -->
+                <div id="favorites-page" class="page">
+                    <h2 class="form-title">Любими паркинги</h2>
+                    <div class="favorites-list" id="favorites-list">
+                        <!-- Динамично ще се генерират -->
+                    </div>
+                </div>
+                
+                <!-- Моят профил -->
+                <div id="profile-page" class="page">
+                    <div class="profile-container">
+                        <div class="profile-header">
+                            <div class="profile-avatar-large">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="profile-header-info">
+                                <h2>Иван Петров</h2>
+                                <p><i class="fas fa-envelope"></i> ivan.petrov@example.com</p>
+                                <p><i class="fas fa-phone"></i> 0888 123 456</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-parking"></i>
+                                <div class="stat-number">24</div>
+                                <div class="stat-label">Посетени паркинга</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-clock"></i>
+                                <div class="stat-number">156</div>
+                                <div class="stat-label">Паркирани часа</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-star"></i>
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Любими места</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <h3><i class="fas fa-info-circle"></i> Лична информация</h3>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <label>Име и фамилия</label>
+                                    <div class="detail-value">Иван Петров</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Имейл адрес</label>
+                                    <div class="detail-value">ivan.petrov@example.com</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Телефон</label>
+                                    <div class="detail-value">0888 123 456</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Регистрационен номер</label>
+                                    <div class="detail-value">В 1234 АБ</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Град</label>
+                                    <div class="detail-value">София</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Адрес</label>
+                                    <div class="detail-value">ул. Витоша 15</div>
+                                </div>
+                            </div>
+                            
+                            <button class="edit-profile-btn">
+                                <i class="fas fa-edit"></i>
+                                Редактирай профила
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Вход -->
+                <div id="login-page" class="page">
+                    <div class="auth-container">
+                        <div class="auth-header">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <h2>Добре дошли!</h2>
+                            <p>Влезте в своя профил</p>
+                        </div>
+                        
+                        <div class="auth-form">
+                            <form id="login-form">
+                                <div class="form-group">
+                                    <label for="login-email">Имейл адрес</label>
+                                    <input type="email" id="login-email" placeholder="your@email.com" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="login-password">Парола</label>
+                                    <input type="password" id="login-password" placeholder="••••••••" required>
+                                </div>
+                                
+                                <button type="submit" class="auth-btn">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Вход
+                                </button>
+                                
+                                <div class="auth-links">
+                                    <a href="#">Забравена парола?</a>
+                                </div>
+                                
+                                <div class="auth-divider">
+                                    <span>или</span>
+                                </div>
+                                
+                                <div class="social-login">
+                                    <button type="button" class="social-btn"><i class="fab fa-google"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-facebook-f"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-apple"></i></button>
+                                </div>
+                                
+                                <div class="auth-links" style="margin-top: 20px;">
+                                    Нямате профил? <a href="#" onclick="document.querySelector('[data-page=register]').click(); return false;">Регистрирайте се</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Регистрация -->
+                <div id="register-page" class="page">
+                    <div class="register-container">
+                        <div class="register-header">
+                            <i class="fas fa-user-plus"></i>
+                            <h2>Създайте профил</h2>
+                            <p>Присъединете се към Parking Finder</p>
+                        </div>
+                        
+                        <div class="register-form">
+                            <form id="register-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="register-firstname">Име *</label>
+                                        <input type="text" id="register-firstname" placeholder="Иван" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="register-lastname">Фамилия *</label>
+                                        <input type="text" id="register-lastname" placeholder="Петров" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="register-email">Имейл *</label>
+                                        <input type="email" id="register-email" placeholder="ivan@example.com" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="register-phone">Телефон *</label>
+                                        <input type="tel" id="register-phone" placeholder="0888 123 456" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="register-password">Парола *</label>
+                                        <input type="password" id="register-password" placeholder="Минимум 6 символа" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="register-confirm">Потвърдете паролата *</label>
+                                        <input type="password" id="register-confirm" placeholder="Повторете паролата" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="register-car">Регистрационен номер (опционално)</label>
+                                    <input type="text" id="register-car" placeholder="В 1234 АБ">
+                                </div>
+                                
+                                <div class="terms-checkbox">
+                                    <input type="checkbox" id="terms" required>
+                                    <label for="terms">Съгласявам се с <a href="#">Общите условия</a> и <a href="#">Политиката за поверителност</a></label>
+                                </div>
+                                
+                                <button type="submit" class="auth-btn">
+                                    <i class="fas fa-user-check"></i>
+                                    Регистрация
+                                </button>
+                                
+                                <div class="auth-divider">
+                                    <span>или</span>
+                                </div>
+                                
+                                <div class="social-login">
+                                    <button type="button" class="social-btn"><i class="fab fa-google"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-facebook-f"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-apple"></i></button>
+                                </div>
+                                
+                                <div class="auth-links" style="margin-top: 20px;">
+                                    Вече имате профил? <a href="#" onclick="document.querySelector('[data-page=login]').click(); return false;">Вход</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Настройки -->
+                <div id="settings-page" class="page">
+                    <h2 class="form-title">Настройки</h2>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Известия за свободни места</h4>
+                                <p>Получавайте известия когато в любимите ви паркинги се освободят места</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="notifications-toggle" checked>
+                                <label for="notifications-toggle" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Тъмна тема</h4>
+                                <p>Превключване между светла и тъмна тема на приложението</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="darkmode-toggle">
+                                <label for="darkmode-toggle" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Автоматично определяне на местоположение</h4>
+                                <p>Позволи на приложението да определя текущото ви местоположение</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="location-toggle" checked>
+                                <label for="location-toggle" class="slider"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Език</h4>
+                                <p>Изберете предпочитан език на приложението</p>
+                            </div>
+                            <select id="language-select">
+                                <option value="bg" selected>Български</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <div class="status-panel">
-        <div class="status-title">СТАТУС НА ПАРКИНГ</div>
-        <div class="status-item">
-            <div>
-                <span class="spot-number">Място 1:</span>
+    <!-- Банер за инсталиране на PWA -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-banner-content">
+            <div class="install-banner-icon">
+                <i class="fas fa-parking"></i>
             </div>
-            <div>
-                <span id="status1" class="status-text status-error">Зареждане...</span>
-            </div>
-        </div>
-        <div class="status-item">
-            <div>
-                <span class="spot-number">Място 2:</span>
-            </div>
-            <div>
-                <span id="status2" class="status-text status-error">Зареждане...</span>
+            <div class="install-banner-text">
+                <h4>Инсталирай Parking Finder</h4>
+                <p>Добави на началния екран за бърз достъп</p>
             </div>
         </div>
-        <div class="status-item">
-            <div>
-                <span class="spot-number">Място 3:</span>
-            </div>
-            <div>
-                <span id="status3" class="status-text status-empty">СВОБОДНО</span>
-            </div>
-        </div>
-        <div class="status-item">
-            <div>
-                <span class="spot-number">Място 4:</span>
-            </div>
-            <div>
-                <span id="status4" class="status-text status-empty">СВОБОДНО</span>
-            </div>
-        </div>
-        <div class="last-update" id="lastUpdate">
-            Последна актуализация: --
+        <div class="install-banner-actions">
+            <button class="install-banner-btn" id="installBtn">Инсталирай</button>
+            <button class="install-banner-close" id="closeInstallBanner">&times;</button>
         </div>
     </div>
     
-    <div class="parking-counter">
-        <strong>4 места</strong><br>
-        Размери: 3.0m × 6.0m
+    <!-- Балонче за контакти -->
+    <div class="contact-bubble" id="contactBubble">
+        <i class="fas fa-headset"></i>
     </div>
     
-    <div class="controls">
-        <button onclick="manualRefresh()">Актуализирай статус</button>
+    <!-- Модален прозорец за контакти -->
+    <div class="contact-modal" id="contactModal">
+        <div class="modal-header">
+            <h3><i class="fas fa-headset"></i> Свържете се с нас</h3>
+            <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form class="contact-form" id="contactForm">
+                <textarea placeholder="Напишете вашето съобщение тук..." required></textarea>
+                <button type="submit" class="btn btn-block">
+                    <i class="fas fa-paper-plane"></i> Изпрати съобщение
+                </button>
+            </form>
+            
+            <div class="contact-info">
+                <p><i class="fas fa-phone-alt"></i> 0700 123 45 (24/7)</p>
+                <p><i class="fas fa-envelope"></i> support@parkingfinder.bg</p>
+                <p><i class="fas fa-clock"></i> Отговаряме до 30 минути</p>
+            </div>
+        </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
         // ===== Firebase конфигурация =====
@@ -241,9 +2290,103 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
+        // ===== PWA Инсталация =====
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+        const closeInstallBanner = document.getElementById('closeInstallBanner');
+
+        // Проверка дали вече сме скривали банера
+        if (!localStorage.getItem('installBannerClosed')) {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Предотвратяване на автоматичното показване на мини-инфобара
+                e.preventDefault();
+                // Запазване на събитието за по-късна употреба
+                deferredPrompt = e;
+                // Показване на банера
+                installBanner.style.display = 'flex';
+            });
+        }
+
+        // Бутон за инсталиране
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            
+            // Показване на инсталационния промпт
+            deferredPrompt.prompt();
+            
+            // Изчакване на потребителския избор
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`Потребителски избор: ${outcome}`);
+            
+            // Нулиране на променливата
+            deferredPrompt = null;
+            
+            // Скриване на банера
+            installBanner.style.display = 'none';
+        });
+
+        // Затваряне на банера
+        closeInstallBanner.addEventListener('click', () => {
+            installBanner.style.display = 'none';
+            localStorage.setItem('installBannerClosed', 'true');
+        });
+
+        // Проверка за офлайн режим
+        window.addEventListener('online', () => {
+            console.log('Приложението е онлайн');
+            document.body.classList.remove('offline');
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('Приложението е офлайн');
+            document.body.classList.add('offline');
+            // Можете да покажете известие за офлайн режим
+            if (typeof showNotification === 'function') {
+                showNotification('Вие сте в офлайн режим. Някои функции може да не работят.', 'warning');
+            }
+        });
+
+        // Регистрация на service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker регистриран успешно:', registration.scope);
+                        
+                        // Проверка за обновявания
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('Нов Service Worker се инсталира...');
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Нов съдържание е налично
+                                    if (confirm('Нова версия на приложението е налична. Обновете сега?')) {
+                                        newWorker.postMessage({ action: 'skipWaiting' });
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Грешка при регистрация на Service Worker:', error);
+                    });
+            });
+
+            // Контрол на обновяването
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                }
+            });
+        }
+
         // ===== Променливи за статусите =====
-        let spot1Status = "Зареждане...";
-        let spot2Status = "Зареждане...";
+        let spot1Status = "ЗАРЕЖДАНЕ";
+        let spot2Status = "ЗАРЕЖДАНЕ";
         let spot1Distance = -1;
         let spot2Distance = -1;
         let lastUpdateTime = null;
@@ -251,13 +2394,47 @@
         // ===== Инициализиране на картата =====
         const centerLat = 42.8768;
         const centerLng = 25.3179;
-        const map = L.map('map').setView([centerLat, centerLng], 18.5);
         
-        // Добавяне на слой OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 22
-        }).addTo(map);
+        // Глобални променливи за картата и паркоместата
+        let map = null;
+        let parkingPolygons = [];
+        let parkingLabels = [];
+        
+        // Функция за инициализиране на картата
+        function initializeMap() {
+            // Проверка дали картата вече е инициализирана
+            if (map !== null) return;
+            
+            try {
+                // Създаване на картата
+                map = L.map('map').setView([centerLat, centerLng], 18.5);
+                
+                // Добавяне на стандартен OpenStreetMap слой
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 22
+                }).addTo(map);
+                
+                // Създаване на паркоместата
+                createParkingSpots();
+                
+                // Маркер за локацията
+                L.marker([centerLat, centerLng], {
+                    icon: L.divIcon({
+                        className: 'location-marker',
+                        html: '<i class="fas fa-map-pin" style="color: #ea4335; font-size: 32px; text-shadow: 0 2px 6px rgba(0,0,0,0.3);"></i>',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32]
+                    })
+                }).addTo(map).bindPopup('<div style="text-align: center; min-width: 200px;"><h3 style="margin: 0 0 8px; color: #1a2639;">ул. "Епископ Софроний"</h3><p style="margin: 0; font-size: 14px; color: #5a6a7a;">Габрово, Централен район</p><hr style="margin: 10px 0; border: none; border-top: 1px solid #eef2f6;"><p style="margin: 0; font-size: 13px; color: #0066cc;"><i class="fas fa-wheelchair"></i> Място 1 е за хора с увреждания</p></div>');
+                
+                console.log("Картата е инициализирана успешно");
+            } catch (error) {
+                console.error("Грешка при инициализиране на картата:", error);
+                // Опитай пак след 1 секунда
+                setTimeout(initializeMap, 1000);
+            }
+        }
         
         // По-големи размери за паркоместата
         const parkingWidth = 3.0;
@@ -269,22 +2446,24 @@
             return meters / 111111;
         }
         
-        // Цветове за различните места (по-тъмни за заети, по-светли за свободни)
-        const colorsEmpty = ['#4CAF50', '#4CAF50', '#4CAF50', '#4CAF50'];
-        const colorsOccupied = ['#f44336', '#f44336', '#4CAF50', '#4CAF50'];
+        // Цветове за различните места
+        const colors = {
+            disabledEmpty: '#0066cc',
+            disabledOccupied: '#b71c1c',
+            regularEmpty: '#34a853',
+            regularOccupied: '#ea4335'
+        };
         
-        // Референции към полигоните на паркоместата
-        let parkingPolygons = [];
-        let parkingLabels = [];
-        
-        // Създаване на 4 паркоместа
+        // Създаване на 3 паркоместа
         function createParkingSpots() {
+            if (!map) return;
+            
             parkingPolygons = [];
             parkingLabels = [];
             
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 3; i++) {
                 const offsetLng = metersToDegrees(i * (parkingWidth + spaceBetween));
-                const totalWidth = 4 * parkingWidth + 3 * spaceBetween;
+                const totalWidth = 3 * parkingWidth + 2 * spaceBetween;
                 const centerOffset = metersToDegrees(totalWidth / 2);
                 
                 const spotLat = centerLat;
@@ -301,84 +2480,74 @@
                     [spotLat + halfLength, spotLng - halfWidth]
                 ];
                 
-                // Определяне на цвета според статуса
-                let fillColor = colorsEmpty[i];
-                if (i === 0 && spot1Status === "ЗАЕТО") fillColor = colorsOccupied[i];
-                if (i === 1 && spot2Status === "ЗАЕТО") fillColor = colorsOccupied[i];
+                // Определяне на цвета според статуса и типа място
+                let fillColor;
+                if (i === 0) { // Място за инвалиди
+                    fillColor = spot1Status === "ЗАЕТО" ? colors.disabledOccupied : 
+                               spot1Status === "ПРАЗНО" ? colors.disabledEmpty : colors.disabledEmpty;
+                } else if (i === 1) { // Обикновено място със сензор
+                    fillColor = spot2Status === "ЗАЕТО" ? colors.regularOccupied : 
+                               spot2Status === "ПРАЗНО" ? colors.regularEmpty : colors.regularEmpty;
+                } else { // Място 3 - демо
+                    fillColor = colors.regularEmpty;
+                }
                 
                 // Създаване на паркомястото
                 const parkingSpace = L.polygon(corners, {
-                    color: '#000000',
+                    color: '#ffffff',
                     fillColor: fillColor,
-                    fillOpacity: 0.7,
-                    weight: 1.5,
-                    className: 'parking-space'
+                    fillOpacity: 0.8,
+                    weight: 2
                 }).addTo(map);
                 
                 parkingPolygons.push(parkingSpace);
                 
-                // Добавяне на номер
-                const label = L.marker([spotLat, spotLng], {
+                // Добавяне на номер с икона
+                let labelHtml;
+                if (i === 0) {
+                    labelHtml = '<div style="background: white; color: ' + fillColor + '; font-weight: 700; font-size: 16px; width: 44px; height: 44px; border-radius: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid ' + fillColor + '; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-family: \'Segoe UI\', sans-serif; line-height: 1.2; background: rgba(255,255,255,0.98);"><span style="font-size: 12px;">' + (i + 1) + '</span><i class="fas fa-wheelchair" style="font-size: 18px;"></i></div>';
+                } else {
+                    labelHtml = '<div style="background: white; color: ' + fillColor + '; font-weight: 700; font-size: 18px; width: 38px; height: 38px; border-radius: 30px; display: flex; align-items: center; justify-content: center; border: 3px solid ' + fillColor + '; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-family: \'Segoe UI\', sans-serif; background: rgba(255,255,255,0.98);">' + (i + 1) + '</div>';
+                }
+                
+                L.marker([spotLat, spotLng], {
                     icon: L.divIcon({
                         className: 'parking-label',
-                        html: `<div style="
-                            background: white; 
-                            color: ${fillColor}; 
-                            font-weight: bold; 
-                            font-size: 18px; 
-                            width: 32px; 
-                            height: 32px; 
-                            border-radius: 50%; 
-                            display: flex; 
-                            align-items: center; 
-                            justify-content: center;
-                            border: 2px solid ${fillColor};
-                            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                            font-family: Arial, sans-serif;
-                        ">${i + 1}</div>`,
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 16]
+                        html: labelHtml,
+                        iconSize: i === 0 ? [44, 44] : [38, 38],
+                        iconAnchor: i === 0 ? [22, 22] : [19, 19]
                     })
                 }).addTo(map);
                 
-                parkingLabels.push(label);
-                
                 // Информация при клик
-                let statusText = "ПРАЗНО";
-                let statusColor = "#4CAF50";
+                let statusText = spot1Status;
+                if (i === 1) statusText = spot2Status;
+                else if (i === 2) statusText = "СВОБОДНО";
+                
+                let popupContent = '<div style="text-align: center; min-width: 220px;"><div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;"><div style="background: ' + fillColor + '; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">' + (i + 1) + '</div>' + (i === 0 ? '<i class="fas fa-wheelchair" style="color: #0066cc; font-size: 24px;"></i>' : '') + '</div><h3 style="margin: 0 0 8px; color: #1a2639; font-weight: 600;">Паркомясто ' + (i + 1) + '</h3>';
                 
                 if (i === 0) {
-                    statusText = spot1Status;
-                    statusColor = spot1Status === "ЗАЕТО" ? "#f44336" : "#4CAF50";
-                } else if (i === 1) {
-                    statusText = spot2Status;
-                    statusColor = spot2Status === "ЗАЕТО" ? "#f44336" : "#4CAF50";
+                    popupContent += '<p style="margin: 0 0 8px; font-size: 14px; color: #0066cc; font-weight: 600; background: #e3f2fd; padding: 4px 12px; border-radius: 30px; display: inline-block;">✦ За хора с увреждания ✦</p>';
                 }
                 
-                parkingSpace.bindPopup(`
-                    <div style="text-align: center; min-width: 200px;">
-                        <div style="display: inline-block; background: ${fillColor}; color: white; width: 32px; height: 32px; border-radius: 50%; line-height: 32px; font-weight: bold; margin-bottom: 8px;">
-                            ${i + 1}
-                        </div>
-                        <h3 style="margin: 0 0 8px; color: ${fillColor};">Паркомясто ${i + 1}</h3>
-                        <p style="margin: 0 0 10px; font-size: 14px; color: #555;">
-                            ул. "Епископ Софроний", Габрово
-                        </p>
-                        <div style="text-align: left; font-size: 13px; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                            <div style="margin-bottom: 5px;">
-                                <strong>Статус:</strong> 
-                                <span style="color: ${statusColor}; font-weight: bold;">${statusText}</span>
-                            </div>
-                            ${i < 2 ? `<div><strong>Разстояние:</strong> ${i === 0 ? spot1Distance : spot2Distance} см</div>` : ''}
-                        </div>
-                    </div>
-                `);
+                popupContent += '<p style="margin: 0 0 12px; font-size: 13px; color: #5a6a7a;"><i class="fas fa-map-marker-alt" style="color: #ea4335;"></i> ул. "Епископ Софроний", Габрово</p><div style="text-align: left; font-size: 13px; background: #f8f9fa; padding: 12px; border-radius: 12px;"><div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><i class="fas fa-circle" style="color: ' + fillColor + '; font-size: 10px;"></i><strong>Статус:</strong> <span style="color: ' + fillColor + '; font-weight: 700;">' + statusText + '</span></div>';
+                
+                if (i === 0) {
+                    popupContent += '<div style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-ruler"></i><strong>Разстояние:</strong> ' + spot1Distance + ' см</div>';
+                }
+                if (i === 1) {
+                    popupContent += '<div style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-ruler"></i><strong>Разстояние:</strong> ' + spot2Distance + ' см</div>';
+                }
+                
+                popupContent += '</div></div>';
+                
+                parkingSpace.bindPopup(popupContent);
             }
         }
         
         // ===== Firebase слушатели =====
         function setupFirebaseListeners() {
-            // Слушател за място 1
+            // Слушател за място 1 (инвалиди)
             database.ref('parking/spot1').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -387,8 +2556,11 @@
                     
                     // Актуализиране на UI
                     updateSpotStatus(1, spot1Status, spot1Distance);
-                    updateMapColors();
+                    if (map && parkingPolygons.length > 0) {
+                        updateMapColors();
+                    }
                     updateLastUpdateTime();
+                    updateFreeSpotsCount();
                 }
             });
             
@@ -401,8 +2573,11 @@
                     
                     // Актуализиране на UI
                     updateSpotStatus(2, spot2Status, spot2Distance);
-                    updateMapColors();
+                    if (map && parkingPolygons.length > 0) {
+                        updateMapColors();
+                    }
                     updateLastUpdateTime();
+                    updateFreeSpotsCount();
                 }
             });
             
@@ -411,63 +2586,98 @@
         
         // ===== UI функции =====
         function updateSpotStatus(spotNumber, status, distance) {
-            const statusElement = document.getElementById(`status${spotNumber}`);
-            const statusClass = status === "ЗАЕТО" ? "status-occupied" : 
-                               status === "ПРАЗНО" ? "status-empty" : "status-error";
+            const statusElement = document.getElementById('status' + spotNumber);
+            if (!statusElement) return;
             
-            statusElement.textContent = status;
-            statusElement.className = `status-text ${statusClass}`;
+            // Определяне на класа и иконата за статус
+            let statusClass = '';
+            let icon = '';
             
-            // Актуализиране на дистанцията в tooltip
-            if (spotNumber <= 2) {
-                console.log(`Място ${spotNumber}: ${status} (${distance} см)`);
+            if (spotNumber === 1) {
+                if (status === "ЗАЕТО") {
+                    statusClass = "status-disabled-occupied";
+                    icon = '<i class="fas fa-times-circle"></i>';
+                } else if (status === "ПРАЗНО") {
+                    statusClass = "status-disabled-empty";
+                    icon = '<i class="fas fa-check-circle"></i>';
+                } else {
+                    statusClass = "status-pending";
+                    icon = '<i class="fas fa-spinner fa-spin"></i>';
+                }
+            } else {
+                if (status === "ЗАЕТО") {
+                    statusClass = "status-occupied";
+                    icon = '<i class="fas fa-times-circle"></i>';
+                } else if (status === "ПРАЗНО") {
+                    statusClass = "status-empty";
+                    icon = '<i class="fas fa-check-circle"></i>';
+                } else {
+                    statusClass = "status-pending";
+                    icon = '<i class="fas fa-spinner fa-spin"></i>';
+                }
+            }
+            
+            statusElement.innerHTML = icon + ' ' + status;
+            statusElement.className = 'status-value ' + statusClass;
+            
+            // Добавяне на tooltip с разстояние
+            if (distance > 0) {
+                statusElement.title = 'Разстояние: ' + distance + ' см';
             }
         }
         
         function updateMapColors() {
-            // Актуализиране на цветовете на паркоместата
+            if (!map || parkingPolygons.length === 0) return;
+            
             for (let i = 0; i < parkingPolygons.length; i++) {
-                let fillColor = colorsEmpty[i];
+                let fillColor;
                 
-                if (i === 0 && spot1Status === "ЗАЕТО") fillColor = colorsOccupied[i];
-                if (i === 1 && spot2Status === "ЗАЕТО") fillColor = colorsOccupied[i];
+                if (i === 0) {
+                    fillColor = spot1Status === "ЗАЕТО" ? colors.disabledOccupied : 
+                               spot1Status === "ПРАЗНО" ? colors.disabledEmpty : colors.disabledEmpty;
+                } else if (i === 1) {
+                    fillColor = spot2Status === "ЗАЕТО" ? colors.regularOccupied : 
+                               spot2Status === "ПРАЗНО" ? colors.regularEmpty : colors.regularEmpty;
+                } else {
+                    fillColor = colors.regularEmpty;
+                }
                 
                 parkingPolygons[i].setStyle({ fillColor: fillColor });
-                
-                // Актуализиране на цвета на номера
-                if (parkingLabels[i]) {
-                    parkingLabels[i].setIcon(L.divIcon({
-                        className: 'parking-label',
-                        html: `<div style="
-                            background: white; 
-                            color: ${fillColor}; 
-                            font-weight: bold; 
-                            font-size: 18px; 
-                            width: 32px; 
-                            height: 32px; 
-                            border-radius: 50%; 
-                            display: flex; 
-                            align-items: center; 
-                            justify-content: center;
-                            border: 2px solid ${fillColor};
-                            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                            font-family: Arial, sans-serif;
-                        ">${i + 1}</div>`,
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 16]
-                    }));
-                }
+            }
+        }
+        
+        function updateFreeSpotsCount() {
+            let free = 1; // Място 3 винаги свободно
+            
+            if (spot1Status === "ПРАЗНО") free++;
+            if (spot2Status === "ПРАЗНО") free++;
+            
+            const freeSpotsElement = document.getElementById('freeSpots');
+            if (freeSpotsElement) {
+                freeSpotsElement.textContent = free;
             }
         }
         
         function updateLastUpdateTime() {
             lastUpdateTime = new Date();
-            const timeString = lastUpdateTime.toLocaleTimeString('bg-BG');
-            document.getElementById('lastUpdate').textContent = 
-                `Последна актуализация: ${timeString}`;
+            const timeString = lastUpdateTime.toLocaleTimeString('bg-BG', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            const lastUpdateElement = document.getElementById('lastUpdate');
+            if (lastUpdateElement) {
+                lastUpdateElement.innerHTML = '<i class="far fa-clock"></i> Последна актуализация: ' + timeString;
+            }
         }
         
         function manualRefresh() {
+            const refreshBtn = document.querySelector('.controls button i');
+            if (refreshBtn) {
+                refreshBtn.className = 'fas fa-spinner fa-spin';
+            }
+            
             // Ръчно актуализиране на данните
             database.ref('parking').once('value').then((snapshot) => {
                 const data = snapshot.val();
@@ -482,60 +2692,188 @@
                         spot2Status = data.spot2.status || "ГРЕШКА";
                         updateSpotStatus(2, spot2Status, spot2Distance);
                     }
-                    updateMapColors();
+                    if (map && parkingPolygons.length > 0) {
+                        updateMapColors();
+                    }
                     updateLastUpdateTime();
-                    
-                    alert(`Данните са актуализирани!\nМясто 1: ${spot1Status}\nМясто 2: ${spot2Status}`);
+                    updateFreeSpotsCount();
+                }
+                if (refreshBtn) {
+                    refreshBtn.className = 'fas fa-sync-alt';
                 }
             }).catch((error) => {
                 console.error("Грешка при ръчно актуализиране:", error);
-                alert("Грешка при свързване с Firebase!");
+                if (refreshBtn) {
+                    refreshBtn.className = 'fas fa-exclamation-triangle';
+                    setTimeout(() => {
+                        refreshBtn.className = 'fas fa-sync-alt';
+                    }, 2000);
+                }
             });
         }
         
-        // ===== Инициализация =====
-        function init() {
-            // Създаване на паркоместата
-            createParkingSpots();
+        // ===== Функция за тъмна/светла тема =====
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDarkTheme = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                const darkmodeToggle = document.getElementById('darkmode-toggle');
+                if (darkmodeToggle) darkmodeToggle.checked = true;
+            }
+        }
+        
+        // ===== Функции за навигация и любими =====
+        
+        // Инициализация на приложението
+        document.addEventListener('DOMContentLoaded', function() {
+            // Зареждане на запазената тема
+            loadTheme();
             
-            // Настройване на Firebase слушатели
+            // Инициализиране на картата
+            setTimeout(function() {
+                initializeMap();
+            }, 200);
+            
+            // Настройка на Firebase слушатели
             setupFirebaseListeners();
             
-            locationMarker.bindPopup(`
-                <div style="text-align: center; min-width: 180px;">
-                    <h3 style="margin: 0 0 5px; color: #d71920;">ул. "Епископ Софроний"</h3>
-                    <p style="margin: 0; font-size: 14px;">
-                        Габрово, Централен район
-                    </p>
-                    <p style="margin: 5px 0 0; font-size: 12px; color: #555;">
-                        4 обозначени паркоместа
-                    </p>
-                    <p style="margin: 5px 0 0; font-size: 11px; color: #777;">
-                        Реални данни от сензори за места 1 и 2
-                    </p>
-                </div>
-            `);
-            
-            console.log("Картата и Firebase са инициализирани");
-            
             // Първоначално ръчно зареждане на данни
-            setTimeout(manualRefresh, 1000);
-        }
+            setTimeout(manualRefresh, 1500);
+            
+            // Генериране на любими паркинги
+            generateFavorites();
+            
+            // Навигация между страниците
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = document.querySelectorAll('.page');
+            const pageTitle = document.getElementById('page-title');
+            
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    const pageId = this.getAttribute('data-page');
+                    
+                    // Промяна на активния елемент в навигацията
+                    navItems.forEach(function(nav) {
+                        nav.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Показване на съответната страница
+                    pages.forEach(function(page) {
+                        page.classList.remove('active');
+                        if (page.id === pageId + '-page') {
+                            page.classList.add('active');
+                            
+                            // Промяна на заглавието
+                            const pageNames = {
+                                'map': 'Карта на паркингите',
+                                'favorites': 'Любими места',
+                                'profile': 'Моят профил',
+                                'login': 'Вход в системата',
+                                'register': 'Регистрация',
+                                'settings': 'Настройки'
+                            };
+                            pageTitle.textContent = pageNames[pageId];
+                            
+                            // Преоразмеряване на картата при показване
+                            if (pageId === 'map') {
+                                setTimeout(function() {
+                                    if (map) map.invalidateSize();
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Бутон за търсене
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('search-input').value;
+                if (searchTerm.trim() !== '') {
+                    alert('Търсене за: "' + searchTerm + '"');
+                }
+            });
+            
+            // Функция за генериране на любими паркинги
+            function generateFavorites() {
+                const favoritesList = document.getElementById('favorites-list');
+                const favorites = [
+                    {name: "ул. Епископ Софроний", address: "ул. Епископ Софроний, Габрово", free: 3, total: 3, status: "free"},
+                    {name: "Централен паркинг", address: "ул. „Граф Игнатиев“ 2, София", free: 42, total: 158, status: "free"},
+                    {name: "Паркинг Мол София", address: "бул. „Александър Малинов“ 31, София", free: 15, total: 200, status: "free"},
+                    {name: "Паркинг НДК", address: "бул. „Васил Левски“ 1, София", free: 0, total: 100, status: "busy"}
+                ];
+                
+                favoritesList.innerHTML = '';
+                
+                favorites.forEach(function(favorite) {
+                    const statusClass = favorite.status === 'free' ? 'status-free' : 'status-busy';
+                    const statusText = favorite.status === 'free' ? 'Свободни места' : 'Няма свободни места';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'favorite-card';
+                    card.innerHTML = '<div class="favorite-header"><div class="favorite-name">' + favorite.name + '</div><div class="favorite-status ' + statusClass + '">' + statusText + '</div></div><p><i class="fas fa-map-marker-alt"></i> ' + favorite.address + '</p><p><i class="fas fa-car"></i> Свободни: ' + favorite.free + ' / ' + favorite.total + '</p><button class="btn" style="margin-top: 10px; width: 100%;"><i class="fas fa-directions"></i> Навигирай</button>';
+                    
+                    favoritesList.appendChild(card);
+                });
+            }
+            
+            // Функционалност за балончето за контакти
+            const contactBubble = document.getElementById('contactBubble');
+            const contactModal = document.getElementById('contactModal');
+            const closeModal = document.getElementById('closeModal');
+            const contactForm = document.getElementById('contactForm');
+            
+            contactBubble.addEventListener('click', function() {
+                contactModal.classList.toggle('active');
+            });
+            
+            closeModal.addEventListener('click', function() {
+                contactModal.classList.remove('active');
+            });
+            
+            // Затваряне на модала при клик извън него
+            document.addEventListener('click', function(event) {
+                if (!contactModal.contains(event.target) && !contactBubble.contains(event.target) && contactModal.classList.contains('active')) {
+                    contactModal.classList.remove('active');
+                }
+            });
+            
+            // Обработка на формата за контакти
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const message = this.querySelector('textarea').value;
+                if (message.trim() !== '') {
+                    alert('Вашето съобщение беше изпратено успешно! Ще се свържем с вас скоро.');
+                    this.querySelector('textarea').value = '';
+                    contactModal.classList.remove('active');
+                }
+            });
+            
+            // Предотвратяване на затварянето при клик вътре в модала
+            contactModal.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Тъмна тема toggle
+            const darkmodeToggle = document.getElementById('darkmode-toggle');
+            if (darkmodeToggle) {
+                darkmodeToggle.addEventListener('change', function() {
+                    toggleTheme();
+                });
+            }
+        });
         
-        // Стартиране на приложението
-        init();
-        
-        // Показване на информация в конзолата
-        console.log("Система за мониторинг на паркинг места");
-        console.log("Връзка с Firebase: " + firebaseConfig.databaseURL);
-        console.log("Място 1 и 2: реални данни от сензори");
-        console.log("Място 3 и 4: демонстрационни данни");
-
-        if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker регистриран!'))
-      .catch(err => console.log('Грешка: ', err));
-        }
+        console.log("Система за мониторинг на паркинг места - Габрово");
+        console.log("Място 1: ЗА ИНВАЛИДИ (реални данни)");
+        console.log("Място 2: Обикновено (реални данни)");
+        console.log("Място 3: Демонстрационно място");
     </script>
 </body>
 </html>
