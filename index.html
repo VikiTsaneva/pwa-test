@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Parking Finder - Намерете свободни паркоместа</title>
+    <title>Parkly - Намерете свободни паркоместа</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Parking Finder">
+    <meta name="apple-mobile-web-app-title" content="Parkly">
     
     <!-- Theme color -->
     <meta name="theme-color" content="#2c3e50">
@@ -133,8 +133,27 @@
         }
 
         .sidebar-header .logo-icon {
+            margin-right: 12px;
+            vertical-align: middle;
+            display: inline-block;
+            background: transparent;
+            filter: none;
+        }
+
+        .sidebar-header img.logo-icon {
+            width: 96px;
+            height: 96px;
+            object-fit: contain;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            image-rendering: optimizeQuality;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
+        }
+
+        .sidebar-header i.logo-icon {
+            font-size: 2.4rem;
             color: var(--secondary);
-            margin-right: 10px;
+            line-height: 1;
         }
 
         .nav-menu {
@@ -278,7 +297,7 @@
             to { opacity: 1; }
         }
 
-        /* Карта - подобрена стабилност */
+        /* Карта - стилове от вашия код */
         #map {
             height: 100%;
             width: 100%;
@@ -286,24 +305,11 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             z-index: 1;
-            position: relative;
-            will-change: transform;
         }
 
         .map-container {
             height: 100%;
             position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            background-color: #c8e0f0;
-        }
-
-        .leaflet-tile-container {
-            z-index: 1;
-        }
-
-        .leaflet-container {
-            background-color: #c8e0f0;
         }
 
         /* Заглавие на картата */
@@ -940,6 +946,30 @@
 
         .auth-divider span {
             padding: 0 10px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--input-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            color: var(--text-color);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
+            color: var(--secondary);
         }
 
         /* Стилове за регистрация */
@@ -1798,87 +1828,16 @@
             }
         }
 
-        /* Езикова поддръжка */
-        .lang-en {
+        /* Езикова поддръжка - скриване на елементи според езика */
+        [data-lang="bg"] .lang-en {
             display: none !important;
         }
 
-        body[data-lang="en"] .lang-bg {
+        [data-lang="en"] .lang-bg {
             display: none !important;
         }
 
-        body[data-lang="en"] .lang-en {
-            display: inline-block !important;
-        }
-
-        body[data-lang="en"] .nav-item span.lang-en,
-        body[data-lang="en"] .user-name.lang-en,
-        body[data-lang="en"] .user-status.lang-en,
-        body[data-lang="en"] .header h1.lang-en,
-        body[data-lang="en"] .search-bar input.lang-en,
-        body[data-lang="en"] .map-title h2.lang-en,
-        body[data-lang="en"] .map-title p.lang-en,
-        body[data-lang="en"] .status-title.lang-en,
-        body[data-lang="en"] .spot-number .lang-en,
-        body[data-lang="en"] .status-value .lang-en,
-        body[data-lang="en"] .last-update .lang-en,
-        body[data-lang="en"] .stat-item .label.lang-en,
-        body[data-lang="en"] .legend-item span.lang-en,
-        body[data-lang="en"] .controls button span.lang-en,
-        body[data-lang="en"] .form-title.lang-en,
-        body[data-lang="en"] .profile-header-info h2.lang-en,
-        body[data-lang="en"] .profile-header-info p.lang-en,
-        body[data-lang="en"] .stat-card .stat-label.lang-en,
-        body[data-lang="en"] .profile-details h3.lang-en,
-        body[data-lang="en"] .detail-item label.lang-en,
-        body[data-lang="en"] .edit-profile-btn span.lang-en,
-        body[data-lang="en"] .auth-header h2.lang-en,
-        body[data-lang="en"] .auth-header p.lang-en,
-        body[data-lang="en"] .auth-form label.lang-en,
-        body[data-lang="en"] .auth-form input.lang-en,
-        body[data-lang="en"] .auth-btn span.lang-en,
-        body[data-lang="en"] .auth-links a.lang-en,
-        body[data-lang="en"] .register-header h2.lang-en,
-        body[data-lang="en"] .register-header p.lang-en,
-        body[data-lang="en"] .register-form label.lang-en,
-        body[data-lang="en"] .register-form input.lang-en,
-        body[data-lang="en"] .terms-checkbox label.lang-en,
-        body[data-lang="en"] .favorite-name.lang-en,
-        body[data-lang="en"] .favorite-card p.lang-en,
-        body[data-lang="en"] .favorite-status.lang-en,
-        body[data-lang="en"] .setting-info h4.lang-en,
-        body[data-lang="en"] .setting-info p.lang-en,
-        body[data-lang="en"] .modal-header h3.lang-en,
-        body[data-lang="en"] .contact-form textarea.lang-en,
-        body[data-lang="en"] .contact-info p.lang-en,
-        body[data-lang="en"] .install-banner-text h4.lang-en,
-        body[data-lang="en"] .install-banner-text p.lang-en,
-        body[data-lang="en"] .install-banner-btn span.lang-en {
-            display: block !important;
-        }
-
-        body[data-lang="en"] .spot-number .lang-en,
-        body[data-lang="en"] .status-value .lang-en,
-        body[data-lang="en"] .favorite-status.lang-en {
-            display: inline-block !important;
-        }
-
-        /* Мобилна навигация - само икони и за двата езика */
-        @media (max-width: 768px) {
-            .nav-item span {
-                display: none !important;
-            }
-            
-            .nav-item i {
-                margin-right: 0;
-                font-size: 1.3rem;
-            }
-            
-            /* Скрий текста на навигация и при английски език */
-            body[data-lang="en"] .nav-item span.lang-en {
-                display: none !important;
-            }
-        }
+        /* Language switching is handled via JavaScript - no CSS needed */
     </style>
 </head>
 <body data-lang="bg">
@@ -1886,7 +1845,7 @@
         <!-- Сайдбар с навигация -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h2><i class="fas fa-parking logo-icon"></i> <span class="lang-bg">Parking Finder</span><span class="lang-en">Parking Finder</span></h2>
+                <h2><i class="fas fa-parking logo-icon"></i> <span class="lang-bg">Parkly</span><span class="lang-en">Parkly</span></h2>
             </div>
             
             <div class="nav-menu">
@@ -1923,10 +1882,10 @@
             </div>
             
             <div class="user-info">
-                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div class="user-avatar">ИП</div>
                 <div>
-                    <div class="user-name lang-bg">Потребител</div>
-                    <div class="user-name lang-en">User</div>
+                    <div class="user-name lang-bg">Иван Петров</div>
+                    <div class="user-name lang-en">Ivan Petrov</div>
                     <div class="user-status lang-bg">Онлайн</div>
                     <div class="user-status lang-en">Online</div>
                 </div>
@@ -2090,29 +2049,29 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <div class="profile-header-info">
-                                <h2 class="lang-bg">Име Фамилия</h2>
-                                <h2 class="lang-en">First Last</h2>
-                                <p><i class="fas fa-envelope"></i> email@example.com</p>
-                                <p><i class="fas fa-phone"></i> +359 888 123 456</p>
+                                <h2 class="lang-bg">Иван Петров</h2>
+                                <h2 class="lang-en">Ivan Petrov</h2>
+                                <p><i class="fas fa-envelope"></i> ivan.petrov@example.com</p>
+                                <p><i class="fas fa-phone"></i> 0888 123 456</p>
                             </div>
                         </div>
                         
                         <div class="profile-stats-grid">
                             <div class="stat-card">
                                 <i class="fas fa-parking"></i>
-                                <div class="stat-number">0</div>
+                                <div class="stat-number">24</div>
                                 <div class="stat-label lang-bg">Посетени паркинга</div>
                                 <div class="stat-label lang-en">Parkings visited</div>
                             </div>
                             <div class="stat-card">
                                 <i class="fas fa-clock"></i>
-                                <div class="stat-number">0</div>
+                                <div class="stat-number">156</div>
                                 <div class="stat-label lang-bg">Паркирани часа</div>
                                 <div class="stat-label lang-en">Hours parked</div>
                             </div>
                             <div class="stat-card">
                                 <i class="fas fa-star"></i>
-                                <div class="stat-number">0</div>
+                                <div class="stat-number">12</div>
                                 <div class="stat-label lang-bg">Любими места</div>
                                 <div class="stat-label lang-en">Favorites</div>
                             </div>
@@ -2124,34 +2083,34 @@
                                 <div class="detail-item">
                                     <label class="lang-bg">Име и фамилия</label>
                                     <label class="lang-en">Full name</label>
-                                    <div class="detail-value lang-bg">Име Фамилия</div>
-                                    <div class="detail-value lang-en">First Last</div>
+                                    <div class="detail-value lang-bg">Иван Петров</div>
+                                    <div class="detail-value lang-en">Ivan Petrov</div>
                                 </div>
                                 <div class="detail-item">
                                     <label>Email</label>
-                                    <div class="detail-value">email@example.com</div>
+                                    <div class="detail-value">ivan.petrov@example.com</div>
                                 </div>
                                 <div class="detail-item">
                                     <label class="lang-bg">Телефон</label>
                                     <label class="lang-en">Phone</label>
-                                    <div class="detail-value">+359 888 123 456</div>
+                                    <div class="detail-value">0888 123 456</div>
                                 </div>
                                 <div class="detail-item">
                                     <label class="lang-bg">Регистрационен номер</label>
                                     <label class="lang-en">License plate</label>
-                                    <div class="detail-value">--</div>
+                                    <div class="detail-value">В 1234 АБ</div>
                                 </div>
                                 <div class="detail-item">
                                     <label class="lang-bg">Град</label>
                                     <label class="lang-en">City</label>
-                                    <div class="detail-value lang-bg">--</div>
-                                    <div class="detail-value lang-en">--</div>
+                                    <div class="detail-value lang-bg">София</div>
+                                    <div class="detail-value lang-en">Sofia</div>
                                 </div>
                                 <div class="detail-item">
                                     <label class="lang-bg">Адрес</label>
                                     <label class="lang-en">Address</label>
-                                    <div class="detail-value lang-bg">--</div>
-                                    <div class="detail-value lang-en">--</div>
+                                    <div class="detail-value lang-bg">ул. Витоша 15</div>
+                                    <div class="detail-value lang-en">15 Vitosha Street</div>
                                 </div>
                             </div>
                             
@@ -2179,15 +2138,15 @@
                             <form id="login-form">
                                 <div class="form-group">
                                     <label for="login-email">Email</label>
-                                    <input type="email" id="login-email" class="lang-bg" required>
-                                    <input type="email" id="login-email" class="lang-en" required>
+                                    <input type="email" id="login-email" class="lang-bg" placeholder="your@email.com" required>
+                                    <input type="email" id="login-email" class="lang-en" placeholder="your@email.com" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="login-password" class="lang-bg">Парола</label>
                                     <label for="login-password" class="lang-en">Password</label>
-                                    <input type="password" id="login-password" class="lang-bg" required>
-                                    <input type="password" id="login-password" class="lang-en" required>
+                                    <input type="password" id="login-password" class="lang-bg" placeholder="••••••••" required>
+                                    <input type="password" id="login-password" class="lang-en" placeholder="••••••••" required>
                                 </div>
                                 
                                 <button type="submit" class="auth-btn">
@@ -2204,6 +2163,12 @@
                                 <div class="auth-divider">
                                     <span class="lang-bg">или</span>
                                     <span class="lang-en">or</span>
+                                </div>
+                                
+                                <div class="social-login">
+                                    <button type="button" class="social-btn"><i class="fab fa-google"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-facebook-f"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-apple"></i></button>
                                 </div>
                                 
                                 <div class="auth-links" style="margin-top: 20px;">
@@ -2224,8 +2189,8 @@
                             <i class="fas fa-user-plus"></i>
                             <h2 class="lang-bg">Създайте профил</h2>
                             <h2 class="lang-en">Create Account</h2>
-                            <p class="lang-bg">Присъединете се към Parking Finder</p>
-                            <p class="lang-en">Join Parking Finder</p>
+                            <p class="lang-bg">Присъединете се към Parkly</p>
+                            <p class="lang-en">Join Parkly</p>
                         </div>
                         
                         <div class="register-form">
@@ -2234,26 +2199,26 @@
                                     <div class="form-group">
                                         <label for="register-firstname" class="lang-bg">Име *</label>
                                         <label for="register-firstname" class="lang-en">First Name *</label>
-                                        <input type="text" id="register-firstname" class="lang-bg" required>
-                                        <input type="text" id="register-firstname" class="lang-en" required>
+                                        <input type="text" id="register-firstname" class="lang-bg" placeholder="Иван" required>
+                                        <input type="text" id="register-firstname" class="lang-en" placeholder="Ivan" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="register-lastname" class="lang-bg">Фамилия *</label>
                                         <label for="register-lastname" class="lang-en">Last Name *</label>
-                                        <input type="text" id="register-lastname" class="lang-bg" required>
-                                        <input type="text" id="register-lastname" class="lang-en" required>
+                                        <input type="text" id="register-lastname" class="lang-bg" placeholder="Петров" required>
+                                        <input type="text" id="register-lastname" class="lang-en" placeholder="Petrov" required>
                                     </div>
                                 </div>
                                 
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="register-email">Email *</label>
-                                        <input type="email" id="register-email" required>
+                                        <input type="email" id="register-email" placeholder="ivan@example.com" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="register-phone" class="lang-bg">Телефон *</label>
                                         <label for="register-phone" class="lang-en">Phone *</label>
-                                        <input type="tel" id="register-phone" required>
+                                        <input type="tel" id="register-phone" placeholder="0888 123 456" required>
                                     </div>
                                 </div>
                                 
@@ -2261,22 +2226,22 @@
                                     <div class="form-group">
                                         <label for="register-password" class="lang-bg">Парола *</label>
                                         <label for="register-password" class="lang-en">Password *</label>
-                                        <input type="password" id="register-password" class="lang-bg" required>
-                                        <input type="password" id="register-password" class="lang-en" required>
+                                        <input type="password" id="register-password" class="lang-bg" placeholder="Минимум 6 символа" required>
+                                        <input type="password" id="register-password" class="lang-en" placeholder="Minimum 6 characters" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="register-confirm" class="lang-bg">Потвърдете паролата *</label>
                                         <label for="register-confirm" class="lang-en">Confirm Password *</label>
-                                        <input type="password" id="register-confirm" class="lang-bg" required>
-                                        <input type="password" id="register-confirm" class="lang-en" required>
+                                        <input type="password" id="register-confirm" class="lang-bg" placeholder="Повторете паролата" required>
+                                        <input type="password" id="register-confirm" class="lang-en" placeholder="Repeat password" required>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="register-car" class="lang-bg">Регистрационен номер (опционално)</label>
                                     <label for="register-car" class="lang-en">License plate (optional)</label>
-                                    <input type="text" id="register-car" class="lang-bg">
-                                    <input type="text" id="register-car" class="lang-en">
+                                    <input type="text" id="register-car" class="lang-bg" placeholder="В 1234 АБ">
+                                    <input type="text" id="register-car" class="lang-en" placeholder="ABC 123">
                                 </div>
                                 
                                 <div class="terms-checkbox">
@@ -2294,6 +2259,12 @@
                                 <div class="auth-divider">
                                     <span class="lang-bg">или</span>
                                     <span class="lang-en">or</span>
+                                </div>
+                                
+                                <div class="social-login">
+                                    <button type="button" class="social-btn"><i class="fab fa-google"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-facebook-f"></i></button>
+                                    <button type="button" class="social-btn"><i class="fab fa-apple"></i></button>
                                 </div>
                                 
                                 <div class="auth-links" style="margin-top: 20px;">
@@ -2349,8 +2320,8 @@
                 <i class="fas fa-parking"></i>
             </div>
             <div class="install-banner-text">
-                <h4 class="lang-bg">Инсталирай Parking Finder</h4>
-                <h4 class="lang-en">Install Parking Finder</h4>
+                <h4 class="lang-bg">Инсталирай Parkly</h4>
+                <h4 class="lang-en">Install Parkly</h4>
                 <p class="lang-bg">Добави на началния екран за бърз достъп</p>
                 <p class="lang-en">Add to home screen for quick access</p>
             </div>
@@ -2374,8 +2345,8 @@
         </div>
         <div class="modal-body">
             <form class="contact-form" id="contactForm">
-                <textarea class="lang-bg" required></textarea>
-                <textarea class="lang-en" required></textarea>
+                <textarea class="lang-bg" placeholder="Напишете вашето съобщение тук..." required></textarea>
+                <textarea class="lang-en" placeholder="Write your message here..." required></textarea>
                 <button type="submit" class="btn btn-block">
                     <i class="fas fa-paper-plane"></i> <span class="lang-bg">Изпрати съобщение</span><span class="lang-en">Send message</span>
                 </button>
@@ -2415,26 +2386,40 @@
         // Проверка дали вече сме скривали банера
         if (!localStorage.getItem('installBannerClosed')) {
             window.addEventListener('beforeinstallprompt', (e) => {
+                // Предотвратяване на автоматичното показване на мини-инфобара
                 e.preventDefault();
+                // Запазване на събитието за по-късна употреба
                 deferredPrompt = e;
+                // Показване на банера
                 installBanner.style.display = 'flex';
             });
         }
 
+        // Бутон за инсталиране
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) return;
+            
+            // Показване на инсталационния промпт
             deferredPrompt.prompt();
+            
+            // Изчакване на потребителския избор
             const { outcome } = await deferredPrompt.userChoice;
             console.log(`Потребителски избор: ${outcome}`);
+            
+            // Нулиране на променливата
             deferredPrompt = null;
+            
+            // Скриване на банера
             installBanner.style.display = 'none';
         });
 
+        // Затваряне на банера
         closeInstallBanner.addEventListener('click', () => {
             installBanner.style.display = 'none';
             localStorage.setItem('installBannerClosed', 'true');
         });
 
+        // Проверка за офлайн режим
         window.addEventListener('online', () => {
             console.log('Приложението е онлайн');
             document.body.classList.remove('offline');
@@ -2443,33 +2428,28 @@
         window.addEventListener('offline', () => {
             console.log('Приложението е офлайн');
             document.body.classList.add('offline');
+            // Можете да покажете известие за офлайн режим
+            if (typeof showNotification === 'function') {
+                showNotification('Вие сте в офлайн режим. Някои функции може да не работят.', 'warning');
+            }
         });
 
+        // Регистрация на service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Проверка дали се използва подходящ протокол (не file://)
-                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const isHttps = window.location.protocol === 'https:';
-                const isHttp = window.location.protocol === 'http:';
-                
-                if (!isHttps && !isHttp) {
-                    console.warn('Service Worker не може да бъде регистриран при file:// протокол. Използвайте localhost или HTTP(S) сървър.');
-                    console.log('За локално разработване, стартирайте: python -m http.server 8000');
-                    return;
-                }
-                
                 navigator.serviceWorker.register('service-worker.js')
                     .then(registration => {
                         console.log('Service Worker регистриран успешно:', registration.scope);
                         
+                        // Проверка за обновявания
                         registration.addEventListener('updatefound', () => {
                             const newWorker = registration.installing;
                             console.log('Нов Service Worker се инсталира...');
                             
                             newWorker.addEventListener('statechange', () => {
                                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    const currentLang = document.body.getAttribute('data-lang') || 'bg';
-                                    if (confirm(currentLang === 'bg' ? 'Нова версия на приложението е налична. Обновете сега?' : 'New version available. Update now?')) {
+                                    // Нов съдържание е налично
+                                    if (confirm('Нова версия на приложението е налична. Обновете сега?')) {
                                         newWorker.postMessage({ action: 'skipWaiting' });
                                     }
                                 }
@@ -2481,6 +2461,7 @@
                     });
             });
 
+            // Контрол на обновяването
             let refreshing = false;
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 if (!refreshing) {
@@ -2501,57 +2482,30 @@
         const centerLat = 42.8768;
         const centerLng = 25.3179;
         
+        // Глобални променливи за картата и паркоместата
         let map = null;
         let parkingPolygons = [];
         let parkingLabels = [];
-        let mapInitialized = false;
-        let mapRetryCount = 0;
-        const MAX_RETRIES = 3;
         
+        // Функция за инициализиране на картата
         function initializeMap() {
-            if (mapInitialized) return;
+            // Проверка дали картата вече е инициализирана
+            if (map !== null) return;
             
             try {
-                const mapElement = document.getElementById('map');
-                if (!mapElement) {
-                    console.warn("Елементът #map не е намерен, опитвам пак след 500ms");
-                    setTimeout(initializeMap, 500);
-                    return;
-                }
+                // Създаване на картата
+                map = L.map('map').setView([centerLat, centerLng], 18.5);
                 
-                if (map !== null) {
-                    map.invalidateSize(true);
-                    return;
-                }
-                
-                console.log("Опит за инициализиране на картата...");
-                
-                map = L.map('map', {
-                    center: [centerLat, centerLng],
-                    zoom: 18.5,
-                    fadeAnimation: true,
-                    zoomAnimation: true,
-                    markerZoomAnimation: true,
-                    preferCanvas: true,
-                    updateWhenIdle: true,
-                    reuseTiles: true
-                });
-                
-                const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                // Добавяне на стандартен OpenStreetMap слой
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    maxZoom: 22,
-                    minZoom: 15,
-                    keepBuffer: 4,
-                    updateWhenZooming: false,
-                    updateInterval: 200
+                    maxZoom: 22
                 }).addTo(map);
                 
-                tileLayer.on('tileerror', function(error) {
-                    console.warn("Грешка при зареждане на тайл:", error);
-                });
-                
+                // Създаване на паркоместата
                 createParkingSpots();
                 
+                // Маркер за локацията
                 L.marker([centerLat, centerLng], {
                     icon: L.divIcon({
                         className: 'location-marker',
@@ -2561,69 +2515,25 @@
                     })
                 }).addTo(map).bindPopup('<div style="text-align: center; min-width: 200px;"><h3 style="margin: 0 0 8px; color: #1a2639;">ул. "Епископ Софроний"</h3><p style="margin: 0; font-size: 14px; color: #5a6a7a;">Габрово, Централен район</p><hr style="margin: 10px 0; border: none; border-top: 1px solid #eef2f6;"><p style="margin: 0; font-size: 13px; color: #0066cc;"><i class="fas fa-wheelchair"></i> Място 1 е за хора с увреждания</p></div>');
                 
-                mapInitialized = true;
-                mapRetryCount = 0;
-                
                 console.log("Картата е инициализирана успешно");
-                
-                setTimeout(() => {
-                    if (map) {
-                        map.invalidateSize(true);
-                    }
-                }, 500);
-                
             } catch (error) {
                 console.error("Грешка при инициализиране на картата:", error);
-                
-                if (mapRetryCount < MAX_RETRIES) {
-                    mapRetryCount++;
-                    const delay = mapRetryCount * 1000;
-                    console.log(`Опит ${mapRetryCount} от ${MAX_RETRIES} след ${delay}ms`);
-                    setTimeout(initializeMap, delay);
-                } else {
-                    console.error("Неуспешно инициализиране на картата след " + MAX_RETRIES + " опита");
-                    const mapContainer = document.querySelector('.map-container');
-                    if (mapContainer) {
-                        mapContainer.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.9); padding: 20px; border-radius: 10px; text-align: center; z-index: 2000;"><i class="fas fa-exclamation-triangle" style="color: #e74c3c; font-size: 48px; margin-bottom: 10px;"></i><h3>' + (document.body.getAttribute('data-lang') === 'en' ? 'Failed to load map' : 'Грешка при зареждане на картата') + '</h3><p>' + (document.body.getAttribute('data-lang') === 'en' ? 'Please refresh the page' : 'Моля, опреснете страницата') + '</p></div>';
-                    }
-                }
+                // Опитай пак след 1 секунда
+                setTimeout(initializeMap, 1000);
             }
         }
         
-        function recoverMap() {
-            if (!map) {
-                initializeMap();
-                return;
-            }
-            
-            try {
-                map.invalidateSize(true);
-                
-                const tileContainer = document.querySelector('.leaflet-tile-container');
-                if (!tileContainer || tileContainer.children.length === 0) {
-                    console.warn("Тайловете не се показват, опит за възстановяване...");
-                    
-                    map.eachLayer(function(layer) {
-                        if (layer instanceof L.TileLayer) {
-                            layer.redraw();
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error("Грешка при възстановяване на картата:", error);
-            }
-        }
-        
-        setInterval(recoverMap, 10000);
-        
+        // По-големи размери за паркоместата
         const parkingWidth = 3.0;
         const parkingLength = 6.0;
         const spaceBetween = 0.5;
         
+        // Функция за преобразуване на метри в градуси
         function metersToDegrees(meters) {
             return meters / 111111;
         }
         
+        // Цветове за различните места
         const colors = {
             disabledEmpty: '#0066cc',
             disabledOccupied: '#b71c1c',
@@ -2631,6 +2541,7 @@
             regularOccupied: '#ea4335'
         };
         
+        // Създаване на 3 паркоместа
         function createParkingSpots() {
             if (!map) return;
             
@@ -2648,6 +2559,7 @@
                 const halfWidth = metersToDegrees(parkingWidth) / 2;
                 const halfLength = metersToDegrees(parkingLength) / 2;
                 
+                // Ъглите на правоъгълника
                 const corners = [
                     [spotLat - halfLength, spotLng - halfWidth],
                     [spotLat - halfLength, spotLng + halfWidth],
@@ -2655,28 +2567,29 @@
                     [spotLat + halfLength, spotLng - halfWidth]
                 ];
                 
+                // Определяне на цвета според статуса и типа място
                 let fillColor;
-                if (i === 0) {
+                if (i === 0) { // Място за инвалиди
                     fillColor = spot1Status === "ЗАЕТО" ? colors.disabledOccupied : 
                                spot1Status === "ПРАЗНО" ? colors.disabledEmpty : colors.disabledEmpty;
-                } else if (i === 1) {
+                } else if (i === 1) { // Обикновено място със сензор
                     fillColor = spot2Status === "ЗАЕТО" ? colors.regularOccupied : 
                                spot2Status === "ПРАЗНО" ? colors.regularEmpty : colors.regularEmpty;
-                } else {
+                } else { // Място 3 - демо
                     fillColor = colors.regularEmpty;
                 }
                 
+                // Създаване на паркомястото
                 const parkingSpace = L.polygon(corners, {
                     color: '#ffffff',
                     fillColor: fillColor,
                     fillOpacity: 0.8,
-                    weight: 2,
-                    interactive: true,
-                    smoothFactor: 1.0
+                    weight: 2
                 }).addTo(map);
                 
                 parkingPolygons.push(parkingSpace);
                 
+                // Добавяне на номер с икона
                 let labelHtml;
                 if (i === 0) {
                     labelHtml = '<div style="background: white; color: ' + fillColor + '; font-weight: 700; font-size: 16px; width: 44px; height: 44px; border-radius: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid ' + fillColor + '; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-family: \'Segoe UI\', sans-serif; line-height: 1.2; background: rgba(255,255,255,0.98);"><span style="font-size: 12px;">' + (i + 1) + '</span><i class="fas fa-wheelchair" style="font-size: 18px;"></i></div>';
@@ -2693,28 +2606,24 @@
                     })
                 }).addTo(map);
                 
+                // Информация при клик
                 let statusText = spot1Status;
                 if (i === 1) statusText = spot2Status;
                 else if (i === 2) statusText = "СВОБОДНО";
                 
-                const currentLang = document.body.getAttribute('data-lang') || 'bg';
-                let popupContent = '<div style="text-align: center; min-width: 220px;"><div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;"><div style="background: ' + fillColor + '; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">' + (i + 1) + '</div>' + (i === 0 ? '<i class="fas fa-wheelchair" style="color: #0066cc; font-size: 24px;"></i>' : '') + '</div><h3 style="margin: 0 0 8px; color: #1a2639; font-weight: 600;">' + (currentLang === 'bg' ? 'Паркомясто ' : 'Parking spot ') + (i + 1) + '</h3>';
+                let popupContent = '<div style="text-align: center; min-width: 220px;"><div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;"><div style="background: ' + fillColor + '; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">' + (i + 1) + '</div>' + (i === 0 ? '<i class="fas fa-wheelchair" style="color: #0066cc; font-size: 24px;"></i>' : '') + '</div><h3 style="margin: 0 0 8px; color: #1a2639; font-weight: 600;">Паркомясто ' + (i + 1) + '</h3>';
                 
                 if (i === 0) {
-                    popupContent += '<p style="margin: 0 0 8px; font-size: 14px; color: #0066cc; font-weight: 600; background: #e3f2fd; padding: 4px 12px; border-radius: 30px; display: inline-block;">✦ ' + (currentLang === 'bg' ? 'За хора с увреждания' : 'Disabled spot') + ' ✦</p>';
+                    popupContent += '<p style="margin: 0 0 8px; font-size: 14px; color: #0066cc; font-weight: 600; background: #e3f2fd; padding: 4px 12px; border-radius: 30px; display: inline-block;">✦ За хора с увреждания ✦</p>';
                 }
                 
-                popupContent += '<p style="margin: 0 0 12px; font-size: 13px; color: #5a6a7a;"><i class="fas fa-map-marker-alt" style="color: #ea4335;"></i> ' + (currentLang === 'bg' ? 'ул. "Епископ Софроний", Габрово' : '"Ep. Sofroniy" Street, Gabrovo') + '</p><div style="text-align: left; font-size: 13px; background: #f8f9fa; padding: 12px; border-radius: 12px;"><div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><i class="fas fa-circle" style="color: ' + fillColor + '; font-size: 10px;"></i><strong>' + (currentLang === 'bg' ? 'Статус:' : 'Status:') + '</strong> <span style="color: ' + fillColor + '; font-weight: 700;">' + (currentLang === 'bg' ? statusText : 
-                    (statusText === "ЗАЕТО" ? "OCCUPIED" : 
-                     statusText === "ПРАЗНО" ? "FREE" : 
-                     statusText === "СВОБОДНО" ? "FREE" : 
-                     statusText === "ЗАРЕЖДАНЕ" ? "LOADING" : "ERROR")) + '</span></div>';
+                popupContent += '<p style="margin: 0 0 12px; font-size: 13px; color: #5a6a7a;"><i class="fas fa-map-marker-alt" style="color: #ea4335;"></i> ул. "Епископ Софроний", Габрово</p><div style="text-align: left; font-size: 13px; background: #f8f9fa; padding: 12px; border-radius: 12px;"><div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;"><i class="fas fa-circle" style="color: ' + fillColor + '; font-size: 10px;"></i><strong>Статус:</strong> <span style="color: ' + fillColor + '; font-weight: 700;">' + statusText + '</span></div>';
                 
                 if (i === 0) {
-                    popupContent += '<div style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-ruler"></i><strong>' + (currentLang === 'bg' ? 'Разстояние:' : 'Distance:') + '</strong> ' + spot1Distance + ' cm</div>';
+                    popupContent += '<div style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-ruler"></i><strong>Разстояние:</strong> ' + spot1Distance + ' см</div>';
                 }
                 if (i === 1) {
-                    popupContent += '<div style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-ruler"></i><strong>' + (currentLang === 'bg' ? 'Разстояние:' : 'Distance:') + '</strong> ' + spot2Distance + ' cm</div>';
+                    popupContent += '<div style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-ruler"></i><strong>Разстояние:</strong> ' + spot2Distance + ' см</div>';
                 }
                 
                 popupContent += '</div></div>';
@@ -2725,12 +2634,14 @@
         
         // ===== Firebase слушатели =====
         function setupFirebaseListeners() {
+            // Слушател за място 1 (инвалиди)
             database.ref('parking/spot1').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     spot1Distance = data.distance || -1;
                     spot1Status = data.status || "ГРЕШКА";
                     
+                    // Актуализиране на UI
                     updateSpotStatus(1, spot1Status, spot1Distance);
                     if (map && parkingPolygons.length > 0) {
                         updateMapColors();
@@ -2740,12 +2651,14 @@
                 }
             });
             
+            // Слушател за място 2
             database.ref('parking/spot2').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     spot2Distance = data.distance || -1;
                     spot2Status = data.status || "ГРЕШКА";
                     
+                    // Актуализиране на UI
                     updateSpotStatus(2, spot2Status, spot2Distance);
                     if (map && parkingPolygons.length > 0) {
                         updateMapColors();
@@ -2763,6 +2676,7 @@
             const statusElement = document.getElementById('status' + spotNumber);
             if (!statusElement) return;
             
+            // Определяне на класа и иконата за статус
             let statusClass = '';
             let icon = '';
             
@@ -2790,6 +2704,7 @@
                 }
             }
             
+            // Актуализиране на текста според езика
             const currentLang = document.body.getAttribute('data-lang') || 'bg';
             let statusText = status;
             
@@ -2800,9 +2715,10 @@
                 else if (status === "ГРЕШКА") statusText = "ERROR";
             }
             
-            statusElement.innerHTML = icon + ' <span class="lang-bg">' + status + '</span><span class="lang-en">' + statusText + '</span>';
+            statusElement.innerHTML = icon + ' ' + statusText;
             statusElement.className = 'status-value ' + statusClass;
             
+            // Добавяне на tooltip с разстояние
             if (distance > 0) {
                 statusElement.title = (currentLang === 'bg' ? 'Разстояние: ' : 'Distance: ') + distance + ' cm';
             }
@@ -2829,7 +2745,7 @@
         }
         
         function updateFreeSpotsCount() {
-            let free = 1;
+            let free = 1; // Място 3 винаги свободно
             
             if (spot1Status === "ПРАЗНО") free++;
             if (spot2Status === "ПРАЗНО") free++;
@@ -2851,7 +2767,8 @@
             const lastUpdateElement = document.getElementById('lastUpdate');
             if (lastUpdateElement) {
                 const currentLang = document.body.getAttribute('data-lang') || 'bg';
-                lastUpdateElement.innerHTML = '<i class="far fa-clock"></i> <span class="lang-bg">Последна актуализация: ' + timeString + '</span><span class="lang-en">Last update: ' + timeString + '</span>';
+                const prefix = currentLang === 'bg' ? 'Последна актуализация: ' : 'Last update: ';
+                lastUpdateElement.innerHTML = '<i class="far fa-clock"></i> ' + prefix + timeString;
             }
         }
         
@@ -2861,6 +2778,7 @@
                 refreshBtn.className = 'fas fa-spinner fa-spin';
             }
             
+            // Ръчно актуализиране на данните
             database.ref('parking').once('value').then((snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -2915,24 +2833,27 @@
             document.body.setAttribute('data-lang', lang);
             localStorage.setItem('language', lang);
             
+            // Актуализиране на статусите на паркоместата според езика
             updateSpotStatus(1, spot1Status, spot1Distance);
             updateSpotStatus(2, spot2Status, spot2Distance);
             
+            // Актуализиране на времето за последна актуализация
             updateLastUpdateTime();
             
+            // Актуализиране на заглавието на страницата
             const pageTitle = document.getElementById('page-title');
             const activePage = document.querySelector('.page.active');
             if (activePage) {
                 const pageId = activePage.id.replace('-page', '');
                 const pageNames = {
-                    'map': {bg: 'Карта на паркингите', en: 'Parking Map'},
-                    'favorites': {bg: 'Любими места', en: 'Favorites'},
-                    'profile': {bg: 'Моят профил', en: 'My Profile'},
-                    'login': {bg: 'Вход в системата', en: 'Login'},
-                    'register': {bg: 'Регистрация', en: 'Register'},
-                    'settings': {bg: 'Настройки', en: 'Settings'}
+                    'map': lang === 'bg' ? 'Карта на паркингите' : 'Parking Map',
+                    'favorites': lang === 'bg' ? 'Любими места' : 'Favorites',
+                    'profile': lang === 'bg' ? 'Моят профил' : 'My Profile',
+                    'login': lang === 'bg' ? 'Вход в системата' : 'Login',
+                    'register': lang === 'bg' ? 'Регистрация' : 'Register',
+                    'settings': lang === 'bg' ? 'Настройки' : 'Settings'
                 };
-                pageTitle.innerHTML = '<span class="lang-bg">' + pageNames[pageId].bg + '</span><span class="lang-en">' + pageNames[pageId].en + '</span>';
+                pageTitle.textContent = pageNames[pageId];
             }
             
             console.log('Езикът е сменен на:', lang);
@@ -2950,20 +2871,29 @@
         
         // ===== Функции за навигация и любими =====
         
+        // Инициализация на приложението
         document.addEventListener('DOMContentLoaded', function() {
+            // Зареждане на запазената тема
             loadTheme();
+            
+            // Зареждане на запазения език
             loadLanguage();
             
+            // Инициализиране на картата
             setTimeout(function() {
                 initializeMap();
-            }, 300);
+            }, 200);
             
+            // Настройка на Firebase слушатели
             setupFirebaseListeners();
             
+            // Първоначално ръчно зареждане на данни
             setTimeout(manualRefresh, 1500);
             
+            // Генериране на любими паркинги
             generateFavorites();
             
+            // Навигация между страниците
             const navItems = document.querySelectorAll('.nav-item');
             const pages = document.querySelectorAll('.page');
             const pageTitle = document.getElementById('page-title');
@@ -2972,34 +2902,34 @@
                 item.addEventListener('click', function() {
                     const pageId = this.getAttribute('data-page');
                     
+                    // Промяна на активния елемент в навигацията
                     navItems.forEach(function(nav) {
                         nav.classList.remove('active');
                     });
                     this.classList.add('active');
                     
+                    // Показване на съответната страница
                     pages.forEach(function(page) {
                         page.classList.remove('active');
                         if (page.id === pageId + '-page') {
                             page.classList.add('active');
                             
+                            // Промяна на заглавието според езика
                             const currentLang = document.body.getAttribute('data-lang') || 'bg';
                             const pageNames = {
-                                'map': {bg: 'Карта на паркингите', en: 'Parking Map'},
-                                'favorites': {bg: 'Любими места', en: 'Favorites'},
-                                'profile': {bg: 'Моят профил', en: 'My Profile'},
-                                'login': {bg: 'Вход в системата', en: 'Login'},
-                                'register': {bg: 'Регистрация', en: 'Register'},
-                                'settings': {bg: 'Настройки', en: 'Settings'}
+                                'map': currentLang === 'bg' ? 'Карта на паркингите' : 'Parking Map',
+                                'favorites': currentLang === 'bg' ? 'Любими места' : 'Favorites',
+                                'profile': currentLang === 'bg' ? 'Моят профил' : 'My Profile',
+                                'login': currentLang === 'bg' ? 'Вход в системата' : 'Login',
+                                'register': currentLang === 'bg' ? 'Регистрация' : 'Register',
+                                'settings': currentLang === 'bg' ? 'Настройки' : 'Settings'
                             };
-                            pageTitle.innerHTML = '<span class="lang-bg">' + pageNames[pageId].bg + '</span><span class="lang-en">' + pageNames[pageId].en + '</span>';
+                            pageTitle.textContent = pageNames[pageId];
                             
+                            // Преоразмеряване на картата при показване
                             if (pageId === 'map') {
                                 setTimeout(function() {
-                                    if (map) {
-                                        map.invalidateSize(true);
-                                    } else {
-                                        initializeMap();
-                                    }
+                                    if (map) map.invalidateSize();
                                 }, 300);
                             }
                         }
@@ -3007,6 +2937,7 @@
                 });
             });
             
+            // Бутон за търсене
             document.getElementById('search-btn').addEventListener('click', function() {
                 const searchTerm = document.getElementById('search-input').value;
                 if (searchTerm.trim() !== '') {
@@ -3015,6 +2946,7 @@
                 }
             });
             
+            // Функция за генериране на любими паркинги
             function generateFavorites() {
                 const favoritesList = document.getElementById('favorites-list');
                 const favorites = [
@@ -3035,8 +2967,10 @@
                     card.className = 'favorite-card';
                     card.innerHTML = `
                         <div class="favorite-header">
-                            <div class="favorite-name"><span class="lang-bg">${favorite.name.bg}</span><span class="lang-en">${favorite.name.en}</span></div>
-                            <div class="favorite-status ${statusClass}"><span class="lang-bg">${statusTextBg}</span><span class="lang-en">${statusTextEn}</span></div>
+                            <div class="favorite-name lang-bg">${favorite.name.bg}</div>
+                            <div class="favorite-name lang-en">${favorite.name.en}</div>
+                            <div class="favorite-status ${statusClass} lang-bg">${statusTextBg}</div>
+                            <div class="favorite-status ${statusClass} lang-en">${statusTextEn}</div>
                         </div>
                         <p><i class="fas fa-map-marker-alt"></i> <span class="lang-bg">${favorite.address.bg}</span><span class="lang-en">${favorite.address.en}</span></p>
                         <p><i class="fas fa-car"></i> <span class="lang-bg">Свободни: ${favorite.free} / ${favorite.total}</span><span class="lang-en">Free: ${favorite.free} / ${favorite.total}</span></p>
@@ -3047,6 +2981,7 @@
                 });
             }
             
+            // Функционалност за балончето за контакти
             const contactBubble = document.getElementById('contactBubble');
             const contactModal = document.getElementById('contactModal');
             const closeModal = document.getElementById('closeModal');
@@ -3060,12 +2995,14 @@
                 contactModal.classList.remove('active');
             });
             
+            // Затваряне на модала при клик извън него
             document.addEventListener('click', function(event) {
                 if (!contactModal.contains(event.target) && !contactBubble.contains(event.target) && contactModal.classList.contains('active')) {
                     contactModal.classList.remove('active');
                 }
             });
             
+            // Обработка на формата за контакти
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const message = this.querySelector('textarea').value;
@@ -3077,10 +3014,12 @@
                 }
             });
             
+            // Предотвратяване на затварянето при клик вътре в модала
             contactModal.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
             
+            // Тъмна тема toggle
             const darkmodeToggle = document.getElementById('darkmode-toggle');
             if (darkmodeToggle) {
                 darkmodeToggle.addEventListener('change', function() {
@@ -3088,20 +3027,13 @@
                 });
             }
             
+            // Език select
             const languageSelect = document.getElementById('language-select');
             if (languageSelect) {
                 languageSelect.addEventListener('change', function() {
                     setLanguage(this.value);
                 });
             }
-            
-            window.addEventListener('resize', function() {
-                if (map) {
-                    setTimeout(function() {
-                        map.invalidateSize(true);
-                    }, 100);
-                }
-            });
         });
         
         console.log("Система за мониторинг на паркинг места - Габрово");
