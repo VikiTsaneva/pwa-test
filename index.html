@@ -1602,7 +1602,7 @@
             
             /* Карта на мобилно */
             .map-container {
-                height: 100%;
+                height: 80vh;
                 position: relative;
             }
             
@@ -1986,21 +1986,6 @@
                         </div>
                         
                         <!-- Долен панел -->
-                        <div class="info-footer">
-                            <div class="parking-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-arrows-alt"></i>
-                                    <span class="label lang-bg">Размери:</span>
-                                    <span class="label lang-en">Dimensions:</span>
-                                    <span class="value">3.0m × 6.0m</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-car"></i>
-                                    <span class="label lang-bg">Свободни:</span>
-                                    <span class="label lang-en">Free:</span>
-                                    <span class="value" id="freeSpots">3</span>
-                                </div>
-                            </div>
                             
                             <div class="controls">
                                 <button onclick="manualRefresh()">
@@ -2053,27 +2038,6 @@
                                 <h2 class="lang-en"></h2>
                                 <p><i class="fas fa-envelope"></i> </p>
                                 <p><i class="fas fa-phone"></i> </p>
-                            </div>
-                        </div>
-                        
-                        <div class="profile-stats-grid">
-                            <div class="stat-card">
-                                <i class="fas fa-parking"></i>
-                                <div class="stat-number">24</div>
-                                <div class="stat-label lang-bg">Посетени паркинга</div>
-                                <div class="stat-label lang-en">Parkings visited</div>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-clock"></i>
-                                <div class="stat-number">156</div>
-                                <div class="stat-label lang-bg">Паркирани часа</div>
-                                <div class="stat-label lang-en">Hours parked</div>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-star"></i>
-                                <div class="stat-number">12</div>
-                                <div class="stat-label lang-bg">Любими места</div>
-                                <div class="stat-label lang-en">Favorites</div>
                             </div>
                         </div>
                         
@@ -2199,26 +2163,26 @@
                                     <div class="form-group">
                                         <label for="register-firstname" class="lang-bg">Име *</label>
                                         <label for="register-firstname" class="lang-en">First Name *</label>
-                                        <input type="text" id="register-firstname" class="lang-bg" placeholder="Иван" required>
-                                        <input type="text" id="register-firstname" class="lang-en" placeholder="Ivan" required>
+                                        <input type="text" id="register-firstname" class="lang-bg"  required>
+                                        <input type="text" id="register-firstname" class="lang-en"  required>
                                     </div>
                                     <div class="form-group">
                                         <label for="register-lastname" class="lang-bg">Фамилия *</label>
                                         <label for="register-lastname" class="lang-en">Last Name *</label>
-                                        <input type="text" id="register-lastname" class="lang-bg" placeholder="Петров" required>
-                                        <input type="text" id="register-lastname" class="lang-en" placeholder="Petrov" required>
+                                        <input type="text" id="register-lastname" class="lang-bg"  required>
+                                        <input type="text" id="register-lastname" class="lang-en"  required>
                                     </div>
                                 </div>
                                 
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="register-email">Email *</label>
-                                        <input type="email" id="register-email" placeholder="ivan@example.com" required>
+                                        <input type="email" id="register-email"  required>
                                     </div>
                                     <div class="form-group">
                                         <label for="register-phone" class="lang-bg">Телефон *</label>
                                         <label for="register-phone" class="lang-en">Phone *</label>
-                                        <input type="tel" id="register-phone" placeholder="0888 123 456" required>
+                                        <input type="tel" id="register-phone"  required>
                                     </div>
                                 </div>
                                 
@@ -2226,22 +2190,15 @@
                                     <div class="form-group">
                                         <label for="register-password" class="lang-bg">Парола *</label>
                                         <label for="register-password" class="lang-en">Password *</label>
-                                        <input type="password" id="register-password" class="lang-bg" placeholder="Минимум 6 символа" required>
-                                        <input type="password" id="register-password" class="lang-en" placeholder="Minimum 6 characters" required>
+                                        <input type="password" id="register-password" class="lang-bg"  required>
+                                        <input type="password" id="register-password" class="lang-en"  required>
                                     </div>
                                     <div class="form-group">
                                         <label for="register-confirm" class="lang-bg">Потвърдете паролата *</label>
                                         <label for="register-confirm" class="lang-en">Confirm Password *</label>
-                                        <input type="password" id="register-confirm" class="lang-bg" placeholder="Повторете паролата" required>
-                                        <input type="password" id="register-confirm" class="lang-en" placeholder="Repeat password" required>
+                                        <input type="password" id="register-confirm" class="lang-bg"  required>
+                                        <input type="password" id="register-confirm" class="lang-en"  required>
                                     </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="register-car" class="lang-bg">Регистрационен номер (опционално)</label>
-                                    <label for="register-car" class="lang-en">License plate (optional)</label>
-                                    <input type="text" id="register-car" class="lang-bg" placeholder="В 1234 АБ">
-                                    <input type="text" id="register-car" class="lang-en" placeholder="ABC 123">
                                 </div>
                                 
                                 <div class="terms-checkbox">
@@ -2351,12 +2308,7 @@
                     <i class="fas fa-paper-plane"></i> <span class="lang-bg">Изпрати съобщение</span><span class="lang-en">Send message</span>
                 </button>
             </form>
-            
-            <div class="contact-info">
-                <p><i class="fas fa-phone-alt"></i> 0700 123 45 (24/7)</p>
-                <p><i class="fas fa-envelope"></i> support@parkingfinder.bg</p>
-                <p><i class="fas fa-clock"></i> <span class="lang-bg">Отговаряме до 30 минути</span><span class="lang-en">We respond within 30 minutes</span></p>
-            </div>
+
         </div>
     </div>
 
