@@ -1509,7 +1509,7 @@
             justify-content: center;
         }
 
-        /* Мобилна версия */
+        /* Мобилна версия - ОПРАВЕНА */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto;
@@ -1523,41 +1523,43 @@
             .sidebar {
                 width: 100%;
                 height: auto;
-                min-height: 60px;
+                min-height: 50px;
                 flex-direction: row;
                 position: relative;
                 z-index: 100;
-                padding: 5px 0;
+                padding: 0;
             }
             
             .sidebar-header {
-                padding: 5px 15px;
+                padding: 5px 8px;
                 border-bottom: none;
                 border-right: 1px solid rgba(255, 255, 255, 0.1);
                 display: flex;
                 align-items: center;
+                min-width: 70px;
             }
             
             .sidebar-header h2 {
-                font-size: 1.1rem;
+                font-size: 1rem;
                 margin: 0;
             }
             
             .sidebar-header .logo-icon {
-                font-size: 1.1rem;
-                margin-right: 5px;
+                font-size: 1rem;
+                margin-right: 4px;
             }
             
             .nav-menu {
                 display: flex;
-                padding: 0 10px;
+                padding: 0 2px;
                 flex: 1;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
-                gap: 20px; /* Увеличено разстояние между иконките */
-                justify-content: center; /* Центрира иконките */
+                gap: 5px;
+                justify-content: flex-start;
                 align-items: center;
+                flex-wrap: nowrap;
             }
             
             .nav-menu::-webkit-scrollbar {
@@ -1572,8 +1574,8 @@
                 padding: 8px 5px;
                 border-left: none;
                 border-bottom: 3px solid transparent;
-                min-width: 40px;
-                margin: 0 2px; /* Добавен хоризонтален маржин */
+                min-width: 35px;
+                margin: 0 1px;
             }
             
             .nav-item:hover, .nav-item.active {
@@ -1587,8 +1589,8 @@
             
             .nav-item i {
                 margin-right: 0;
-                font-size: 1.3rem; /* Леко увеличени иконки */
-                color: var(--sidebar-text);
+                font-size: 1.2rem;
+                color: var(--secondary); /* ВЪРНАТ ОРИГИНАЛЕН ЦВЯТ */
             }
             
             .user-info {
@@ -1596,13 +1598,13 @@
             }
             
             .header {
-                padding: 10px 15px;
+                padding: 8px 10px;
                 flex-direction: column;
-                gap: 10px;
+                gap: 5px;
             }
             
             .header h1 {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 text-align: center;
                 margin: 0;
             }
@@ -1613,37 +1615,36 @@
             }
             
             .search-bar input {
-                padding: 8px 12px;
-                font-size: 0.95rem;
+                padding: 6px 10px;
+                font-size: 0.9rem;
             }
             
             .content-area {
-                padding: 10px;
-                height: calc(100vh - 120px);
+                padding: 8px;
+                height: calc(100vh - 110px);
                 overflow-y: auto;
             }
             
             /* Карта на мобилно */
             .map-container {
-                height: 60vh;
+                height: 55vh;
                 position: relative;
             }
             
             .map-title {
-                top: 10px;
-                left: 10px;
-                right: 10px;
+                top: 5px;
+                left: 5px;
+                right: 5px;
                 min-width: auto;
-                padding: 10px 15px;
-                font-size: 0.9rem;
+                padding: 8px 10px;
             }
             
             .map-title h2 {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             
             .map-title p {
-                font-size: 0.85rem;
+                font-size: 0.75rem;
             }
             
             .status-panel {
@@ -1651,11 +1652,11 @@
                 top: auto;
                 right: auto;
                 left: auto;
-                margin: 15px 0 10px;
+                margin: 10px 0 5px;
                 width: 100%;
                 min-width: auto;
                 pointer-events: auto;
-                padding: 15px;
+                padding: 10px;
             }
             
             .info-footer {
@@ -1664,20 +1665,20 @@
                 left: auto;
                 right: auto;
                 flex-direction: column;
-                gap: 10px;
-                margin: 10px 0;
+                gap: 5px;
+                margin: 5px 0;
                 pointer-events: auto;
             }
             
             .parking-stats {
                 width: 100%;
                 justify-content: space-around;
-                padding: 10px 15px;
-                gap: 15px;
+                padding: 8px 10px;
+                gap: 10px;
             }
             
             .stat-item {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             
             .controls {
@@ -1687,14 +1688,14 @@
             .controls button {
                 width: 100%;
                 justify-content: center;
-                padding: 12px 20px;
+                padding: 8px 15px;
             }
             
             .legend {
                 position: relative;
                 bottom: auto;
                 right: auto;
-                margin: 10px 0;
+                margin: 5px 0;
                 width: 100%;
             }
             
@@ -1702,43 +1703,43 @@
             .profile-header {
                 flex-direction: column;
                 text-align: center;
-                padding: 20px 15px;
-                gap: 15px;
+                padding: 15px 10px;
+                gap: 10px;
             }
             
             .profile-avatar-large {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
             }
             
             .profile-header-info h2 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             
             .profile-stats-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
-                padding: 15px;
+                gap: 5px;
+                padding: 10px;
             }
             
             .details-grid {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 8px;
             }
             
             .profile-details {
-                padding: 15px;
+                padding: 10px;
             }
             
             .detail-item .detail-value {
-                font-size: 1rem;
-                padding: 8px 12px;
+                font-size: 0.95rem;
+                padding: 6px 10px;
             }
             
             .edit-profile-btn {
-                padding: 10px 20px;
-                font-size: 0.95rem;
+                padding: 8px 15px;
+                font-size: 0.9rem;
                 width: 100%;
                 justify-content: center;
             }
@@ -1754,91 +1755,91 @@
             
             .auth-header,
             .register-header {
-                padding: 20px 15px;
+                padding: 15px 10px;
             }
             
             .auth-header i,
             .register-header i {
-                font-size: 2.5rem;
-                width: 60px;
-                height: 60px;
-                line-height: 60px;
+                font-size: 2rem;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
             }
             
             .auth-header h2,
             .register-header h2 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             
             .auth-form,
             .register-form {
-                padding: 15px;
+                padding: 10px;
             }
             
             .auth-form .form-group,
             .register-form .form-group {
-                margin-bottom: 15px;
+                margin-bottom: 10px;
             }
             
             .auth-form .form-group input,
             .register-form .form-group input {
-                padding: 10px 12px;
-                font-size: 0.95rem;
+                padding: 8px 10px;
+                font-size: 0.9rem;
             }
             
             .register-form .form-row {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
                 margin-bottom: 0;
             }
             
             .auth-btn {
-                padding: 12px;
+                padding: 10px;
                 font-size: 1rem;
             }
             
             .auth-links {
-                margin-top: 15px;
-                font-size: 0.95rem;
+                margin-top: 10px;
+                font-size: 0.9rem;
             }
             
             .social-login {
-                gap: 8px;
+                gap: 5px;
             }
             
             .social-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.2rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
             }
             
             .terms-checkbox {
-                margin: 15px 0;
+                margin: 10px 0;
                 align-items: flex-start;
             }
             
             .terms-checkbox input {
                 margin-top: 2px;
-                width: 18px;
-                height: 18px;
+                width: 16px;
+                height: 16px;
             }
             
             .terms-checkbox label {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 flex: 1;
-                line-height: 1.4;
+                line-height: 1.3;
             }
             
             /* Настройки на мобилно */
             .settings-list {
-                margin-top: 10px;
+                margin-top: 5px;
             }
             
             .setting-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
-                padding: 15px;
+                gap: 10px;
+                padding: 12px;
             }
             
             .setting-info {
@@ -1846,11 +1847,11 @@
             }
             
             .setting-info h4 {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
             
             .setting-info p {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
             
             .toggle-switch {
@@ -1860,196 +1861,170 @@
             select {
                 width: 100%;
                 min-width: auto;
-                padding: 10px 12px;
+                padding: 8px 10px;
             }
             
             /* Любими места на мобилно */
             .favorites-list {
                 grid-template-columns: 1fr;
-                gap: 15px;
-                margin-top: 15px;
+                gap: 10px;
+                margin-top: 10px;
             }
             
             .favorite-card {
-                padding: 15px;
+                padding: 12px;
             }
             
             .favorite-name {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             
             .favorite-status {
-                font-size: 0.75rem;
-                padding: 4px 10px;
+                font-size: 0.7rem;
+                padding: 3px 8px;
             }
             
             /* Контакти на мобилно */
             .contact-modal {
-                width: calc(100% - 30px);
-                right: 15px;
-                left: 15px;
-                bottom: 80px;
+                width: calc(100% - 20px);
+                right: 10px;
+                left: 10px;
+                bottom: 70px;
                 max-width: 400px;
                 margin: 0 auto;
             }
             
             .contact-bubble {
-                bottom: 20px;
-                right: 20px;
-                width: 55px;
-                height: 55px;
-                font-size: 1.6rem;
-            }
-            
-            .modal-header {
-                padding: 15px;
-            }
-            
-            .modal-header h3 {
-                font-size: 1.1rem;
-            }
-            
-            .modal-body {
-                padding: 15px;
-            }
-            
-            .contact-form textarea {
-                padding: 10px;
-                font-size: 0.95rem;
-                min-height: 100px;
-            }
-            
-            .contact-info {
-                padding: 12px;
-                font-size: 0.9rem;
-            }
-            
-            .install-banner {
-                bottom: 80px;
-                left: 10px;
-                right: 10px;
-                max-width: none;
-                padding: 12px;
-            }
-            
-            .install-banner-content {
-                gap: 10px;
-            }
-            
-            .install-banner-icon {
-                width: 40px;
-                height: 40px;
+                bottom: 15px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
                 font-size: 1.5rem;
             }
             
+            .modal-header {
+                padding: 12px;
+            }
+            
+            .modal-header h3 {
+                font-size: 1rem;
+            }
+            
+            .modal-body {
+                padding: 12px;
+            }
+            
+            .contact-form textarea {
+                padding: 8px;
+                font-size: 0.9rem;
+                min-height: 80px;
+            }
+            
+            .contact-info {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            
+            .install-banner {
+                bottom: 70px;
+                left: 5px;
+                right: 5px;
+                max-width: none;
+                padding: 10px;
+            }
+            
+            .install-banner-content {
+                gap: 8px;
+            }
+            
+            .install-banner-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1.3rem;
+            }
+            
             .install-banner-text h4 {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
             
             .install-banner-text p {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             
             .install-banner-btn {
-                padding: 6px 12px;
-                font-size: 0.85rem;
+                padding: 5px 10px;
+                font-size: 0.8rem;
             }
         }
 
         /* Много малки екрани (под 380px) */
         @media (max-width: 380px) {
             .sidebar-header {
-                padding: 5px 8px;
+                padding: 5px 5px;
+                min-width: 60px;
             }
             
             .sidebar-header h2 {
-                font-size: 0.95rem;
+                font-size: 0.85rem;
             }
             
             .nav-menu {
-                gap: 12px; /* Малко по-малко разстояние на много малки екрани */
-                padding: 0 5px;
+                gap: 3px;
+                padding: 0 1px;
             }
             
             .nav-item {
                 padding: 6px 3px;
-                min-width: 35px;
+                min-width: 32px;
             }
             
             .nav-item i {
-                font-size: 1.2rem;
-            }
-            
-            .map-title {
-                padding: 8px 10px;
+                font-size: 1.1rem;
             }
             
             .map-title h2 {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
             
             .map-title p {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             
             .status-panel {
-                padding: 12px;
+                padding: 8px;
             }
             
             .status-item {
-                padding: 6px 8px;
-                font-size: 0.85rem;
+                padding: 4px 6px;
+                font-size: 0.8rem;
             }
             
             .spot-badge {
-                width: 24px;
-                height: 24px;
-                font-size: 0.8rem;
+                width: 22px;
+                height: 22px;
+                font-size: 0.75rem;
             }
             
             .parking-stats {
-                padding: 8px 12px;
-                gap: 10px;
+                padding: 6px 8px;
+                gap: 8px;
             }
             
             .stat-item {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             
             .stat-item i {
-                font-size: 0.9rem;
-            }
-            
-            .controls button {
-                padding: 10px 16px;
-                font-size: 0.9rem;
-            }
-            
-            .legend-item {
                 font-size: 0.8rem;
             }
             
-            .profile-avatar-large {
-                width: 60px;
-                height: 60px;
-                font-size: 2rem;
+            .controls button {
+                padding: 8px 12px;
+                font-size: 0.85rem;
             }
             
-            .profile-header-info h2 {
-                font-size: 1.3rem;
-            }
-            
-            .auth-header h2,
-            .register-header h2 {
-                font-size: 1.3rem;
-            }
-            
-            .auth-header i,
-            .register-header i {
-                font-size: 2rem;
-                width: 50px;
-                height: 50px;
-                line-height: 50px;
+            .legend-item {
+                font-size: 0.75rem;
             }
         }
 
