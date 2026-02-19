@@ -1523,14 +1523,14 @@
             .sidebar {
                 width: 100%;
                 height: auto;
-                min-height: 60px;
+                min-height: 50px;
                 flex-direction: row;
                 position: relative;
                 z-index: 100;
             }
             
             .sidebar-header {
-                padding: 10px 15px;
+                padding: 5px 10px;
                 border-bottom: none;
                 border-right: 1px solid rgba(255, 255, 255, 0.1);
                 display: flex;
@@ -1561,10 +1561,10 @@
             .nav-item {
                 flex: 0 0 auto;
                 justify-content: center;
-                padding: 0 12px;
+                padding: 0 8px;
                 border-left: none;
                 border-bottom: 3px solid transparent;
-                min-width: 50px;
+                min-width: 40px;
             }
             
             .nav-item:hover, .nav-item.active {
@@ -1578,7 +1578,7 @@
             
             .nav-item i {
                 margin-right: 0;
-                font-size: 1.3rem;
+                font-size: 1.1rem;
             }
             
             .user-info {
@@ -1586,13 +1586,13 @@
             }
             
             .header {
-                padding: 10px 15px;
+                padding: 5px 10px;
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
             
             .header h1 {
-                font-size: 1.3rem;
+                font-size: 1.1rem;
                 text-align: center;
             }
             
@@ -1601,14 +1601,14 @@
             }
             
             .content-area {
-                padding: 10px;
-                height: calc(100vh - 120px);
+                padding: 5px;
+                height: calc(100vh - 100px);
                 overflow-y: auto;
             }
             
             /* Карта на мобилно */
             .map-container {
-                height: 80vh;
+                height: 70vh;
                 position: relative;
             }
             
@@ -1617,12 +1617,12 @@
                 left: 10px;
                 right: 10px;
                 min-width: auto;
-                padding: 10px 15px;
+                padding: 8px 12px;
                 font-size: 0.9rem;
             }
             
             .map-title h2 {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             
             .map-title p {
@@ -1634,7 +1634,7 @@
                 top: auto;
                 right: auto;
                 left: auto;
-                margin-top: 15px;
+                margin-top: 10px;
                 width: 100%;
                 min-width: auto;
                 pointer-events: auto;
@@ -1646,14 +1646,14 @@
                 left: auto;
                 right: auto;
                 flex-direction: column;
-                gap: 10px;
-                margin-top: 15px;
+                gap: 8px;
+                margin-top: 10px;
             }
             
             .parking-stats {
                 width: 100%;
                 justify-content: space-around;
-                padding: 10px;
+                padding: 8px;
             }
             
             .controls {
@@ -1669,7 +1669,7 @@
                 position: relative;
                 bottom: auto;
                 right: auto;
-                margin-top: 15px;
+                margin-top: 10px;
                 width: 100%;
             }
             
@@ -1677,33 +1677,32 @@
             .profile-header {
                 flex-direction: column;
                 text-align: center;
-                padding: 20px;
-                gap: 15px;
+                padding: 10px;
             }
             
             .profile-avatar-large {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
             }
             
             .profile-header-info h2 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             
             .profile-stats-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
-                padding: 20px;
+                gap: 8px;
+                padding: 10px;
             }
             
             .details-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 10px;
             }
             
             .profile-details {
-                padding: 20px;
+                padding: 10px;
             }
             
             /* Форми на мобилно */
@@ -1715,13 +1714,73 @@
                 overflow-y: auto;
             }
             
-            .register-form .form-row {
-                flex-direction: column;
-                gap: 15px;
+            .auth-header,
+            .register-header {
+                padding: 15px;
             }
             
-            .register-form .form-row .form-group {
-                width: 100%;
+            .auth-header i,
+            .register-header i {
+                font-size: 2rem;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+            }
+            
+            .auth-header h2,
+            .register-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .register-form .form-row {
+                flex-direction: column;
+                gap: 2px;
+                margin-bottom: 2px;
+            }
+            
+            .register-form .form-group input {
+                padding: 4px;
+                font-size: 0.7rem;
+            }
+            
+            .register-form .form-group label {
+                font-size: 0.7rem;
+            }
+            
+            /* Бутон за редактиране на профил */
+            .edit-profile-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                margin-top: 15px;
+            }
+            
+            /* Социални бутони */
+            .social-login {
+                gap: 5px;
+            }
+            
+            .social-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            /* Регистрация допълнително */
+            .auth-form {
+                padding: 2px;
+            }
+            
+            .auth-form .form-group,
+            .register-form .form-group {
+                margin-bottom: 2px;
+            }
+            
+            .auth-links {
+                margin-top: 2px;
+            }
+            
+            .register-form {
+                padding: 2px;
             }
             
             /* Настройки на мобилно */
