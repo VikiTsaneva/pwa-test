@@ -1511,8 +1511,13 @@
 
         /* Мобилна версия */
         @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+            
             .container {
                 flex-direction: column;
+                overflow-y: auto;
             }
             
             .sidebar {
@@ -1598,6 +1603,7 @@
             .content-area {
                 padding: 10px;
                 height: calc(100vh - 120px);
+                overflow-y: auto;
             }
             
             /* Карта на мобилно */
@@ -1702,9 +1708,11 @@
             
             /* Форми на мобилно */
             .auth-container,
-            .register-container {
+            .register-container,
+            .profile-container {
                 margin: 10px;
                 width: calc(100% - 20px);
+                overflow-y: auto;
             }
             
             .register-form .form-row {
@@ -1717,6 +1725,10 @@
             }
             
             /* Настройки на мобилно */
+            .settings-list {
+                overflow-y: auto;
+            }
+            
             .setting-item {
                 flex-direction: column;
                 align-items: flex-start;
