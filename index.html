@@ -1523,14 +1523,15 @@
             .sidebar {
                 width: 100%;
                 height: auto;
-                min-height: 50px;
+                min-height: 60px;
                 flex-direction: row;
                 position: relative;
                 z-index: 100;
+                padding: 5px 0;
             }
             
             .sidebar-header {
-                padding: 5px 10px;
+                padding: 5px 15px;
                 border-bottom: none;
                 border-right: 1px solid rgba(255, 255, 255, 0.1);
                 display: flex;
@@ -1538,20 +1539,25 @@
             }
             
             .sidebar-header h2 {
-                font-size: 1rem;
+                font-size: 1.1rem;
+                margin: 0;
             }
             
             .sidebar-header .logo-icon {
-                font-size: 1rem;
+                font-size: 1.1rem;
+                margin-right: 5px;
             }
             
             .nav-menu {
                 display: flex;
-                padding: 0;
+                padding: 0 10px;
                 flex: 1;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
+                gap: 20px; /* Увеличено разстояние между иконките */
+                justify-content: center; /* Центрира иконките */
+                align-items: center;
             }
             
             .nav-menu::-webkit-scrollbar {
@@ -1560,11 +1566,14 @@
             
             .nav-item {
                 flex: 0 0 auto;
+                display: flex;
                 justify-content: center;
-                padding: 0 8px;
+                align-items: center;
+                padding: 8px 5px;
                 border-left: none;
                 border-bottom: 3px solid transparent;
                 min-width: 40px;
+                margin: 0 2px; /* Добавен хоризонтален маржин */
             }
             
             .nav-item:hover, .nav-item.active {
@@ -1578,7 +1587,8 @@
             
             .nav-item i {
                 margin-right: 0;
-                font-size: 1.1rem;
+                font-size: 1.3rem; /* Леко увеличени иконки */
+                color: var(--sidebar-text);
             }
             
             .user-info {
@@ -1586,29 +1596,36 @@
             }
             
             .header {
-                padding: 5px 10px;
+                padding: 10px 15px;
                 flex-direction: column;
-                gap: 8px;
+                gap: 10px;
             }
             
             .header h1 {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
                 text-align: center;
+                margin: 0;
             }
             
             .search-bar {
                 width: 100%;
+                max-width: 100%;
+            }
+            
+            .search-bar input {
+                padding: 8px 12px;
+                font-size: 0.95rem;
             }
             
             .content-area {
-                padding: 5px;
-                height: calc(100vh - 100px);
+                padding: 10px;
+                height: calc(100vh - 120px);
                 overflow-y: auto;
             }
             
             /* Карта на мобилно */
             .map-container {
-                height: 70vh;
+                height: 60vh;
                 position: relative;
             }
             
@@ -1617,16 +1634,16 @@
                 left: 10px;
                 right: 10px;
                 min-width: auto;
-                padding: 8px 12px;
+                padding: 10px 15px;
                 font-size: 0.9rem;
             }
             
             .map-title h2 {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
             
             .map-title p {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
             
             .status-panel {
@@ -1634,10 +1651,11 @@
                 top: auto;
                 right: auto;
                 left: auto;
-                margin-top: 10px;
+                margin: 15px 0 10px;
                 width: 100%;
                 min-width: auto;
                 pointer-events: auto;
+                padding: 15px;
             }
             
             .info-footer {
@@ -1646,14 +1664,20 @@
                 left: auto;
                 right: auto;
                 flex-direction: column;
-                gap: 8px;
-                margin-top: 10px;
+                gap: 10px;
+                margin: 10px 0;
+                pointer-events: auto;
             }
             
             .parking-stats {
                 width: 100%;
                 justify-content: space-around;
-                padding: 8px;
+                padding: 10px 15px;
+                gap: 15px;
+            }
+            
+            .stat-item {
+                font-size: 0.9rem;
             }
             
             .controls {
@@ -1663,13 +1687,14 @@
             .controls button {
                 width: 100%;
                 justify-content: center;
+                padding: 12px 20px;
             }
             
             .legend {
                 position: relative;
                 bottom: auto;
                 right: auto;
-                margin-top: 10px;
+                margin: 10px 0;
                 width: 100%;
             }
             
@@ -1677,7 +1702,331 @@
             .profile-header {
                 flex-direction: column;
                 text-align: center;
+                padding: 20px 15px;
+                gap: 15px;
+            }
+            
+            .profile-avatar-large {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+            
+            .profile-header-info h2 {
+                font-size: 1.5rem;
+            }
+            
+            .profile-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .profile-details {
+                padding: 15px;
+            }
+            
+            .detail-item .detail-value {
+                font-size: 1rem;
+                padding: 8px 12px;
+            }
+            
+            .edit-profile-btn {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* Форми на мобилно */
+            .auth-container,
+            .register-container,
+            .profile-container {
+                margin: 5px;
+                width: calc(100% - 10px);
+                overflow-y: auto;
+            }
+            
+            .auth-header,
+            .register-header {
+                padding: 20px 15px;
+            }
+            
+            .auth-header i,
+            .register-header i {
+                font-size: 2.5rem;
+                width: 60px;
+                height: 60px;
+                line-height: 60px;
+            }
+            
+            .auth-header h2,
+            .register-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .auth-form,
+            .register-form {
+                padding: 15px;
+            }
+            
+            .auth-form .form-group,
+            .register-form .form-group {
+                margin-bottom: 15px;
+            }
+            
+            .auth-form .form-group input,
+            .register-form .form-group input {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+            
+            .register-form .form-row {
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 0;
+            }
+            
+            .auth-btn {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            .auth-links {
+                margin-top: 15px;
+                font-size: 0.95rem;
+            }
+            
+            .social-login {
+                gap: 8px;
+            }
+            
+            .social-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .terms-checkbox {
+                margin: 15px 0;
+                align-items: flex-start;
+            }
+            
+            .terms-checkbox input {
+                margin-top: 2px;
+                width: 18px;
+                height: 18px;
+            }
+            
+            .terms-checkbox label {
+                font-size: 0.9rem;
+                flex: 1;
+                line-height: 1.4;
+            }
+            
+            /* Настройки на мобилно */
+            .settings-list {
+                margin-top: 10px;
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .setting-info {
+                width: 100%;
+            }
+            
+            .setting-info h4 {
+                font-size: 1rem;
+            }
+            
+            .setting-info p {
+                font-size: 0.85rem;
+            }
+            
+            .toggle-switch {
+                align-self: flex-start;
+            }
+            
+            select {
+                width: 100%;
+                min-width: auto;
+                padding: 10px 12px;
+            }
+            
+            /* Любими места на мобилно */
+            .favorites-list {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-top: 15px;
+            }
+            
+            .favorite-card {
+                padding: 15px;
+            }
+            
+            .favorite-name {
+                font-size: 1.1rem;
+            }
+            
+            .favorite-status {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+            
+            /* Контакти на мобилно */
+            .contact-modal {
+                width: calc(100% - 30px);
+                right: 15px;
+                left: 15px;
+                bottom: 80px;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            
+            .contact-bubble {
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+            
+            .modal-header {
+                padding: 15px;
+            }
+            
+            .modal-header h3 {
+                font-size: 1.1rem;
+            }
+            
+            .modal-body {
+                padding: 15px;
+            }
+            
+            .contact-form textarea {
                 padding: 10px;
+                font-size: 0.95rem;
+                min-height: 100px;
+            }
+            
+            .contact-info {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .install-banner {
+                bottom: 80px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                padding: 12px;
+            }
+            
+            .install-banner-content {
+                gap: 10px;
+            }
+            
+            .install-banner-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+            
+            .install-banner-text h4 {
+                font-size: 0.95rem;
+            }
+            
+            .install-banner-text p {
+                font-size: 0.8rem;
+            }
+            
+            .install-banner-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Много малки екрани (под 380px) */
+        @media (max-width: 380px) {
+            .sidebar-header {
+                padding: 5px 8px;
+            }
+            
+            .sidebar-header h2 {
+                font-size: 0.95rem;
+            }
+            
+            .nav-menu {
+                gap: 12px; /* Малко по-малко разстояние на много малки екрани */
+                padding: 0 5px;
+            }
+            
+            .nav-item {
+                padding: 6px 3px;
+                min-width: 35px;
+            }
+            
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+            
+            .map-title {
+                padding: 8px 10px;
+            }
+            
+            .map-title h2 {
+                font-size: 1rem;
+            }
+            
+            .map-title p {
+                font-size: 0.75rem;
+            }
+            
+            .status-panel {
+                padding: 12px;
+            }
+            
+            .status-item {
+                padding: 6px 8px;
+                font-size: 0.85rem;
+            }
+            
+            .spot-badge {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+            }
+            
+            .parking-stats {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+            
+            .stat-item {
+                font-size: 0.8rem;
+            }
+            
+            .stat-item i {
+                font-size: 0.9rem;
+            }
+            
+            .controls button {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .legend-item {
+                font-size: 0.8rem;
             }
             
             .profile-avatar-large {
@@ -1690,33 +2039,9 @@
                 font-size: 1.3rem;
             }
             
-            .profile-stats-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 10px;
-            }
-            
-            .details-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .profile-details {
-                padding: 10px;
-            }
-            
-            /* Форми на мобилно */
-            .auth-container,
-            .register-container,
-            .profile-container {
-                margin: 10px;
-                width: calc(100% - 20px);
-                overflow-y: auto;
-            }
-            
-            .auth-header,
-            .register-header {
-                padding: 15px;
+            .auth-header h2,
+            .register-header h2 {
+                font-size: 1.3rem;
             }
             
             .auth-header i,
@@ -1726,180 +2051,9 @@
                 height: 50px;
                 line-height: 50px;
             }
-            
-            .auth-header h2,
-            .register-header h2 {
-                font-size: 1.4rem;
-            }
-            
-            .register-form .form-row {
-                flex-direction: column;
-                gap: 2px;
-                margin-bottom: 2px;
-            }
-            
-            .register-form .form-group input {
-                padding: 4px;
-                font-size: 0.7rem;
-            }
-            
-            .register-form .form-group label {
-                font-size: 0.7rem;
-            }
-            
-            /* Бутон за редактиране на профил */
-            .edit-profile-btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-                margin-top: 15px;
-            }
-            
-            /* Социални бутони */
-            .social-login {
-                gap: 5px;
-            }
-            
-            .social-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
-            
-            /* Регистрация допълнително */
-            .auth-form {
-                padding: 2px;
-            }
-            
-            .auth-form .form-group,
-            .register-form .form-group {
-                margin-bottom: 2px;
-            }
-            
-            .auth-links {
-                margin-top: 2px;
-            }
-            
-            .register-form {
-                padding: 2px;
-            }
-            
-            /* Настройки на мобилно */
-            .settings-list {
-                overflow-y: auto;
-            }
-            
-            .setting-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .setting-info {
-                width: 100%;
-            }
-            
-            .toggle-switch {
-                align-self: flex-start;
-            }
-            
-            select {
-                width: 100%;
-                min-width: auto;
-            }
-            
-            /* Любими места на мобилно */
-            .favorites-list {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .favorite-card {
-                padding: 15px;
-            }
-            
-            .favorite-name {
-                font-size: 1.1rem;
-            }
-            
-            /* Контакти на мобилно */
-            .contact-modal {
-                width: calc(100% - 20px);
-                right: 10px;
-                left: 10px;
-                bottom: 80px;
-            }
-            
-            .contact-bubble {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-
-            .install-banner {
-                bottom: 80px;
-                left: 10px;
-                right: 10px;
-                max-width: none;
-            }
-            
-            .terms-checkbox {
-                align-items: flex-start;
-            }
-            
-            .terms-checkbox input {
-                margin-top: 3px;
-            }
-            
-            .terms-checkbox label {
-                font-size: 0.9rem;
-                flex: 1;
-            }
         }
 
-        /* Много малки екрани */
-        @media (max-width: 380px) {
-            .sidebar-header h2 {
-                font-size: 0.9rem;
-            }
-            
-            .nav-item i {
-                font-size: 1.1rem;
-            }
-            
-            .map-title {
-                padding: 8px 12px;
-            }
-            
-            .map-title h2 {
-                font-size: 1rem;
-            }
-            
-            .map-title p {
-                font-size: 0.75rem;
-            }
-            
-            .stat-item {
-                font-size: 0.8rem;
-            }
-            
-            .stat-item i {
-                font-size: 0.9rem;
-            }
-            
-            .status-item {
-                font-size: 0.85rem;
-            }
-            
-            .spot-badge {
-                width: 24px;
-                height: 24px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Езикова поддръжка - скриване на елементи според езика */
+        /* Езикова поддръжка */
         [data-lang="bg"] .lang-en {
             display: none !important;
         }
@@ -1908,7 +2062,25 @@
             display: none !important;
         }
 
-        /* Language switching is handled via JavaScript - no CSS needed */
+        /* Офлайн режим индикатор */
+        body.offline::after {
+            content: "📴 Офлайн режим";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--warning);
+            color: #000;
+            text-align: center;
+            padding: 5px;
+            font-size: 0.9rem;
+            z-index: 10000;
+            font-weight: 600;
+        }
+
+        body.offline .lang-en::after {
+            content: "📴 Offline mode";
+        }
     </style>
 </head>
 <body data-lang="bg">
@@ -2057,6 +2229,21 @@
                         </div>
                         
                         <!-- Долен панел -->
+                        <div class="info-footer">
+                            <div class="parking-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-parking"></i>
+                                    <span class="label lang-bg">Общо:</span>
+                                    <span class="label lang-en">Total:</span>
+                                    <span class="value">3</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                    <span class="label lang-bg">Свободни:</span>
+                                    <span class="label lang-en">Free:</span>
+                                    <span class="value" id="freeSpots">1</span>
+                                </div>
+                            </div>
                             
                             <div class="controls">
                                 <button onclick="manualRefresh()">
@@ -2379,7 +2566,6 @@
                     <i class="fas fa-paper-plane"></i> <span class="lang-bg">Изпрати съобщение</span><span class="lang-en">Send message</span>
                 </button>
             </form>
-
         </div>
     </div>
 
@@ -2527,8 +2713,6 @@
                 
                 // Създаване на паркоместата
                 createParkingSpots();
-                
-
                 
                 console.log("Картата е инициализирана успешно");
             } catch (error) {
