@@ -2457,15 +2457,7 @@
                 // Създаване на паркоместата
                 createParkingSpots();
                 
-                // Маркер за локацията
-                L.marker([centerLat, centerLng], {
-                    icon: L.divIcon({
-                        className: 'location-marker',
-                        html: '<i class="fas fa-map-pin" style="color: #ea4335; font-size: 32px; text-shadow: 0 2px 6px rgba(0,0,0,0.3);"></i>',
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 32]
-                    })
-                }).addTo(map).bindPopup('<div style="text-align: center; min-width: 200px;"><h3 style="margin: 0 0 8px; color: #1a2639;">ул. "Епископ Софроний"</h3><p style="margin: 0; font-size: 14px; color: #5a6a7a;">Габрово, Централен район</p><hr style="margin: 10px 0; border: none; border-top: 1px solid #eef2f6;"><p style="margin: 0; font-size: 13px; color: #0066cc;"><i class="fas fa-wheelchair"></i> Място 1 е за хора с увреждания</p></div>');
+
                 
                 console.log("Картата е инициализирана успешно");
             } catch (error) {
