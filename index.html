@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Parkly - Намерете свободни паркоместа</title>
     
+    <!-- Favicon -->
+    <link rel="icon" href="logo .svg" type="image/svg+xml">
+    
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
@@ -147,8 +150,8 @@
         }
 
         .sidebar-header .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 70px;
+            height: 70px;
             margin-right: 10px;
             vertical-align: middle;
             display: inline-block;
@@ -157,8 +160,8 @@
         }
 
         .sidebar-header img.logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 70px;
+            height: 70px;
             object-fit: contain;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -1566,6 +1569,78 @@
             }
         }
 
+        /* Notification съобщение */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid var(--success);
+            display: none;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            max-width: 400px;
+            word-wrap: break-word;
+            transition: all 0.3s ease;
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--accent);
+        }
+
+        .notification.show {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification i {
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        .notification.success i {
+            color: var(--success);
+        }
+
+        .notification.error i {
+            color: var(--accent);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+        }
+
+        .notification.hide {
+            animation: slideOutRight 0.3s ease forwards;
+        }
+
         .modal-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -1969,14 +2044,14 @@
             }
             
             .sidebar-header .logo-icon {
-                width: 30px;
-                height: 30px;
+                width: 55px;
+                height: 55px;
                 margin-right: 4px;
             }
             
             .sidebar-header img.logo-icon {
-                width: 30px;
-                height: 30px;
+                width: 55px;
+                height: 55px;
             }
             
             .nav-menu {
@@ -2390,15 +2465,33 @@
             .users-table {
                 padding: 10px;
                 overflow-x: auto;
+                width: 100%;
             }
             
             .users-table table {
-                min-width: 800px;
-                font-size: 0.8rem;
+                min-width: 100%;
+                font-size: 0.75rem;
+                width: 100%;
+                table-layout: fixed;
             }
             
             .users-table th, .users-table td {
-                padding: 8px 5px;
+                padding: 6px 4px;
+                white-space: normal;
+                overflow-wrap: break-word;
+            }
+
+            /* Правила за колоната с действия - позволява пренасяне на бутоните при тесни ширини */
+            .users-table td.actions-cell {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: flex-start;
+            }
+
+            .users-table td.actions-cell .btn-small {
+                margin: 2px 2px 0 0;
             }
             
             .btn-small {
@@ -2433,8 +2526,32 @@
             }
             
             .sidebar-header .logo-icon {
-                width: 25px;
-                height: 25px;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .users-table {
+                padding: 5px;
+            }
+            
+            .users-table h2 {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+            
+            .users-table table {
+                min-width: 100%;
+                font-size: 0.65rem;
+            }
+            
+            .users-table th, .users-table td {
+                padding: 4px 2px;
+            }
+            
+            .btn-small {
+                padding: 2px 4px;
+                font-size: 0.65rem;
+                margin: 1px 0;
             }
             
             .nav-menu {
@@ -2501,6 +2618,87 @@
             }
         }
 
+        /* Допълнителни responsive правила за много малки екрани */
+        @media (max-width: 480px) {
+            /* Повишаваме четливостта */
+            .users-table {
+                font-size: 0.9rem;
+            }
+
+            .users-table th, .users-table td {
+                padding: 8px 6px;
+            }
+
+            /* Скриваме по-маловажни колони (Role, Provider, Reg., Last Login) за да се виждат основните данни */
+            .users-table th:nth-child(4), .users-table td:nth-child(4),
+            .users-table th:nth-child(6), .users-table td:nth-child(6),
+            .users-table th:nth-child(7), .users-table td:nth-child(7),
+            .users-table th:nth-child(8), .users-table td:nth-child(8) {
+                display: none;
+            }
+
+            /* Направете бутоните удобни за докосване - пълна ширина и пренасяне */
+            .users-table td.actions-cell {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .users-table td.actions-cell .btn-small {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+
+            /* Преобразуване на таблицата в карти за още по-малки екрани */
+            .users-table table, .users-table thead {
+                width: 100%;
+            }
+            .users-table thead {
+                display: none;
+            }
+            .users-table tbody, .users-table tr {
+                display: block;
+            }
+            .users-table tr {
+                background: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            .users-table td {
+                display: flex;
+                justify-content: space-between;
+                padding: 6px 8px;
+                border-bottom: none;
+            }
+            .users-table td:before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: var(--text-secondary);
+                margin-right: 8px;
+                flex: 0 0 40%;
+            }
+            .users-table td.actions-cell {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .users-table td.actions-cell .btn-small {
+                width: 100%;
+            }
+
+            /* Notification за мобилни устройства */
+            .notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+
         [data-lang="bg"] .lang-en {
             display: none !important;
         }
@@ -2535,9 +2733,7 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <h2>
-                    <img src="logo.svg" alt="Parkly" class="logo-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-                    <i class="fas fa-parking logo-icon" style="display: none;"></i>
-                    <span>Parkly</span>
+                     <h2><img src="logo .svg" alt="Parkly logo" class="logo-icon"> <span class="lang-bg">Parkly</span><span class="lang-en">Parkly</span></h2>
                 </h2>
             </div>
             
@@ -2667,7 +2863,7 @@
                                 </div>
                             </div>
                             
-                            <div class="status-item">
+                            <div class="status-item" id="spot3-item">
                                 <div class="spot-number">
                                     <span class="spot-badge">3</span>
                                     <span class="lang-bg">Място 3</span>
@@ -2749,8 +2945,8 @@
                 
                 <!-- Любими места -->
                 <div id="favorites-page" class="page">
-                    <h2 class="form-title lang-bg">⭐ Любими паркинги</h2>
-                    <h2 class="form-title lang-en">⭐ Favorite Parking Lots</h2>
+                    <h2 class="form-title lang-bg"> Любими паркинги</h2>
+                    <h2 class="form-title lang-en"> Favorite Parking Lots</h2>
                     
                     <!-- Login prompt за любими -->
                     <div id="favorites-login-prompt" style="display: none; text-align: center; padding: 50px 20px;">
@@ -2877,8 +3073,8 @@
                 <!-- Админ панел -->
                 <div id="admin-page" class="page">
                     <div class="admin-container">
-                        <h2 class="lang-bg" style="margin-bottom: 20px;">👑 Администраторско табло</h2>
-                        <h2 class="lang-en" style="margin-bottom: 20px;">👑 Admin Dashboard</h2>
+                        <h2 class="lang-bg" style="margin-bottom: 20px;"> Администраторско табло</h2>
+                        <h2 class="lang-en" style="margin-bottom: 20px;"> Admin Dashboard</h2>
                         
                         <div class="admin-stats">
                             <div class="admin-stat-card">
@@ -2911,7 +3107,7 @@
                         <div class="users-table">
                             <h2><i class="fas fa-users"></i> <span class="lang-bg">Управление на потребители</span><span class="lang-en">User Management</span></h2>
                             
-                            <input type="text" class="search-box" id="adminSearchInput" placeholder="🔍 Търси по име или имейл...">
+                            <input type="text" class="search-box" id="adminSearchInput" placeholder="Търси по име или имейл...">
                             
                             <table>
                                 <thead>
@@ -3160,14 +3356,16 @@
         </div>
         <div class="modal-body">
             <form class="contact-form" id="contactForm">
-                <textarea class="lang-bg" placeholder="Вашето съобщение..." required></textarea>
-                <textarea class="lang-en" placeholder="Your message..." required></textarea>
+                <textarea id="contactMessage" name="message" placeholder="Вашето съобщение..." required></textarea>
                 <button type="submit" class="btn btn-block">
                     <i class="fas fa-paper-plane"></i> <span class="lang-bg">Изпрати</span><span class="lang-en">Send</span>
                 </button>
             </form>
         </div>
     </div>
+
+    <!-- Notification съобщение -->
+    <div class="notification" id="notification"></div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -3177,6 +3375,9 @@
     
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
         // ===== Firebase конфигурация =====
@@ -3204,13 +3405,18 @@
         const secondaryApp = firebase.initializeApp(databaseConfig, "secondary");
         const rtdb = secondaryApp.database();
         
+        // Инициализиране на EmailJS (заменете с вашите данни от https://www.emailjs.com/)
+        emailjs.init("1HnRmk_dhUEdS49Eq");
+        
         // ===== Глобални променливи =====
         let currentUser = null;
         let isAdmin = false;
         let spot1Status = "ЗАРЕЖДАНЕ";
         let spot2Status = "ЗАРЕЖДАНЕ";
+        let spot3Status = "СВОБОДНО";
         let spot1Distance = -1;
         let spot2Distance = -1;
+        let spot3Distance = -1;
         let lastUpdateTime = null;
         let map = null;
         let parkingPolygons = [];
@@ -3459,7 +3665,7 @@
             
             favoritesList.innerHTML = favoriteSpots.map(spot => {
                 const spotStatus = spot.id === 'spot1' ? spot1Status : 
-                                   spot.id === 'spot2' ? spot2Status : 'СВОБОДНО';
+                                   spot.id === 'spot2' ? spot2Status : spot3Status;
                 
                 const statusClass = spotStatus === 'СВОБОДНО' || spotStatus === 'ПРАЗНО' ? 'status-free' : 
                                    (spotStatus === 'ЗАЕТО' ? 'status-busy' : '');
@@ -3481,6 +3687,7 @@
                     </p>
                     ${spot.id === 'spot1' && currentUser ? `<p><i class="fas fa-ruler"></i> Разстояние: ${spot1Distance} см</p>` : ''}
                     ${spot.id === 'spot2' && currentUser ? `<p><i class="fas fa-ruler"></i> Разстояние: ${spot2Distance} см</p>` : ''}
+                    ${spot.id === 'spot3' && currentUser ? `<p><i class="fas fa-ruler"></i> Разстояние: ${spot3Distance} см</p>` : ''}
                     
                     <div class="favorite-actions">
                         <button class="navigate-btn" onclick="navigateToSpot(${spot.lat}, ${spot.lng}, '${spot.name}')">
@@ -3549,6 +3756,7 @@
                 // Актуализираме статусите
                 updateSpotStatus(1, spot1Status, spot1Distance);
                 updateSpotStatus(2, spot2Status, spot2Distance);
+                updateSpotStatus(3, spot3Status, spot3Distance);
                 if (map && parkingPolygons.length > 0) {
                     updateMapColors();
                 }
@@ -3578,6 +3786,7 @@
                 // Показваме "ЗАРЕЖДАНЕ" за нелогнати
                 updateSpotStatus(1, "ЗАРЕЖДАНЕ", -1);
                 updateSpotStatus(2, "ЗАРЕЖДАНЕ", -1);
+                updateSpotStatus(3, "СВОБОДНО", -1);
                 
                 // Нулираме админ данните
                 allUsers = [];
@@ -3702,8 +3911,20 @@
         // ===== АДМИН ФУНКЦИИ =====
         async function loadAllUsers() {
             try {
-                const snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
+                console.log('Начало на зареждане на потребители...');
+                let snapshot;
+                
+                try {
+                    // Опитваме с ordering
+                    snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
+                } catch (orderError) {
+                    console.warn('Ordering не работи, зареждаме без него:', orderError);
+                    // Ако ordering не работи, зареждаме без него
+                    snapshot = await db.collection('users').get();
+                }
+                
                 allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                console.log(`Зареждени ${allUsers.length} потребители`);
                 filteredUsers = [...allUsers];
                 
                 updateAdminStats();
@@ -3711,9 +3932,12 @@
                 setupAdminSearch();
             } catch (error) {
                 console.error('Грешка при зареждане на потребители:', error);
-                document.getElementById('adminUsersTableBody').innerHTML = `
-                    <tr><td colspan="9" style="text-align: center; color: var(--accent);">❌ Грешка при зареждане</td></tr>
-                `;
+                const tbody = document.getElementById('adminUsersTableBody');
+                if (tbody) {
+                    tbody.innerHTML = `
+                        <tr><td colspan="9" style="text-align: center; color: var(--accent);">❌ Грешка при зареждане: ${error.message}</td></tr>
+                    `;
+                }
             }
         }
 
@@ -3747,17 +3971,25 @@
         function displayAdminUsers() {
             const tbody = document.getElementById('adminUsersTableBody');
             
-            if (!tbody) return;
+            if (!tbody) {
+                console.error('Таблицата за потребители не е намерена');
+                return;
+            }
+            
+            console.log('displayAdminUsers вызван, filteredUsers:', filteredUsers);
             
             if (filteredUsers.length === 0) {
+                console.warn('Няма потребители за показване');
                 tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Няма потребители</td></tr>';
-                document.getElementById('adminPagination').innerHTML = '';
+                updateAdminPagination();
                 return;
             }
 
             const startIndex = (currentAdminPage - 1) * usersPerPage;
             const endIndex = startIndex + usersPerPage;
             const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+            
+            console.log(`Показване на потребители ${startIndex + 1}-${Math.min(endIndex, filteredUsers.length)} от ${filteredUsers.length}`);
             
             const currentLang = document.body.getAttribute('data-lang') || 'bg';
 
@@ -3769,22 +4001,22 @@
                 
                 return `
                 <tr>
-                    <td>${user.firstName || '-'}</td>
-                    <td>${user.lastName || '-'}</td>
-                    <td>${user.email}</td>
-                    <td>${isAdminUser ? '<span class="admin-badge">' + (currentLang === 'bg' ? 'Админ' : 'Admin') + '</span>' : '<span class="user-badge">' + (currentLang === 'bg' ? 'Потребител' : 'User') + '</span>'}</td>
-                    <td>${user.emailVerified ? '✅' : '❌'}</td>
-                    <td>${user.provider === 'google' ? 'Google' : (currentLang === 'bg' ? 'Имейл' : 'Email')}</td>
-                    <td>${createdAt}</td>
-                    <td>${lastLogin}</td>
-                    <td>
-                        ${!isAdminUser 
-                            ? `<button class="btn-small btn-success" onclick="makeAdmin('${user.id}')">${currentLang === 'bg' ? 'Направи админ' : 'Make admin'}</button>`
-                            : `<button class="btn-small btn-warning" onclick="removeAdmin('${user.id}')">${currentLang === 'bg' ? 'Премахни' : 'Remove'}</button>`
-                        }
-                        <button class="btn-small btn-info" onclick="viewUserDetails('${user.id}')">${currentLang === 'bg' ? 'Детайли' : 'Details'}</button>
-                        <button class="btn-small btn-danger" onclick="deleteUser('${user.id}')">${currentLang === 'bg' ? 'Изтрий' : 'Delete'}</button>
-                    </td>
+                            <td data-label="${currentLang === 'bg' ? 'Име' : 'First'}">${user.firstName || '-'}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Фамилия' : 'Last'}">${user.lastName || '-'}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Имейл' : 'Email'}">${user.email}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Роля' : 'Role'}">${isAdminUser ? '<span class=\"admin-badge\">' + (currentLang === 'bg' ? 'Админ' : 'Admin') + '</span>' : '<span class=\"user-badge\">' + (currentLang === 'bg' ? 'Потребител' : 'User') + '</span>'}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Потв.' : 'Verif.'}">${user.emailVerified ? '✅' : '❌'}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Провайдър' : 'Provider'}">${user.provider === 'google' ? 'Google' : (currentLang === 'bg' ? 'Имейл' : 'Email')}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Регистрация' : 'Reg.'}">${createdAt}</td>
+                            <td data-label="${currentLang === 'bg' ? 'Последен вход' : 'Last Login'}">${lastLogin}</td>
+                            <td class="actions-cell" data-label="${currentLang === 'bg' ? 'Действия' : 'Actions'}">
+                                ${!isAdminUser 
+                                    ? `<button class=\"btn-small btn-success\" onclick=\"makeAdmin('${user.id}')\">${currentLang === 'bg' ? 'Направи админ' : 'Make admin'}</button>`
+                                    : `<button class=\"btn-small btn-warning\" onclick=\"removeAdmin('${user.id}')\">${currentLang === 'bg' ? 'Премахни' : 'Remove'}</button>`
+                                }
+                                <button class=\"btn-small btn-info\" onclick=\"viewUserDetails('${user.id}')\">${currentLang === 'bg' ? 'Детайли' : 'Details'}</button>
+                                <button class=\"btn-small btn-danger\" onclick=\"deleteUser('${user.id}')\">${currentLang === 'bg' ? 'Изтрий' : 'Delete'}</button>
+                            </td>
                 </tr>
             `}).join('');
 
@@ -3962,7 +4194,42 @@
                 }
             });
             
-            console.log("Firebase слушатели са активирани");
+            // Слушател за място 3
+            rtdb.ref('parking/spot3').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    spot3Distance = data.distance || -1;
+                    spot3Status = data.status || "СВОБОДНО";
+                    
+                    console.log("Място 3 обновено:", spot3Status, spot3Distance);
+                    
+                    // Актуализираме UI само ако има логнат потребител
+                    if (currentUser) {
+                        updateSpotStatus(3, spot3Status, spot3Distance);
+                    }
+                    if (map && parkingPolygons.length > 0 && currentUser) {
+                        updateMapColors();
+                    }
+                    updateLastUpdateTime();
+                    updateFreeSpotsCount();
+                    
+                    // Актуализираме любимите, ако страницата е активна
+                    if (document.getElementById('favorites-page').classList.contains('active')) {
+                        displayFavorites();
+                    }
+                } else {
+                    // Ако няма данни, показваме "СВОБОДНО" по подразбиране
+                    spot3Distance = -1;
+                    spot3Status = "СВОБОДНО";
+                    
+                    if (currentUser) {
+                        updateSpotStatus(3, "СВОБОДНО", -1);
+                    }
+                    updateFreeSpotsCount();
+                }
+            });
+            
+            console.log("Firebase слушатели са активирани (включително за място 3)");
         }
 
         function updateSpotStatus(spotNumber, status, distance) {
@@ -3987,7 +4254,7 @@
                 if (status === "ЗАЕТО") {
                     statusClass = "status-occupied";
                     icon = '<i class="fas fa-times-circle"></i>';
-                } else if (status === "ПРАЗНО") {
+                } else if (status === "ПРАЗНО" || status === "СВОБОДНО") {
                     statusClass = "status-empty";
                     icon = '<i class="fas fa-check-circle"></i>';
                 } else {
@@ -4001,7 +4268,7 @@
             
             if (currentLang === 'en') {
                 if (status === "ЗАЕТО") statusText = "OCCUPIED";
-                else if (status === "ПРАЗНО") statusText = "FREE";
+                else if (status === "ПРАЗНО" || status === "СВОБОДНО") statusText = "FREE";
                 else if (status === "ЗАРЕЖДАНЕ") statusText = "LOADING";
                 else if (status === "ГРЕШКА") statusText = "ERROR";
             }
@@ -4020,12 +4287,12 @@
             for (let i = 0; i < parkingPolygons.length; i++) {
                 let fillColor;
                 
-                if (i === 0) {
+                if (i === 0) { // Място 1 (инвалиди)
                     fillColor = spot1Status === "ЗАЕТО" ? '#b71c1c' : '#0066cc';
-                } else if (i === 1) {
+                } else if (i === 1) { // Място 2
                     fillColor = spot2Status === "ЗАЕТО" ? '#ea4335' : '#34a853';
-                } else {
-                    fillColor = '#34a853';
+                } else { // Място 3
+                    fillColor = spot3Status === "ЗАЕТО" ? '#ea4335' : '#34a853';
                 }
                 
                 parkingPolygons[i].setStyle({ fillColor: fillColor });
@@ -4033,10 +4300,11 @@
         }
 
         function updateFreeSpotsCount() {
-            let free = 1; // Място 3 винаги свободно
+            let free = 0;
             
             if (spot1Status === "ПРАЗНО") free++;
             if (spot2Status === "ПРАЗНО") free++;
+            if (spot3Status === "ПРАЗНО" || spot3Status === "СВОБОДНО") free++;
             
             const freeSpotsElement = document.getElementById('freeSpots');
             if (freeSpotsElement) {
@@ -4078,6 +4346,12 @@
                         spot2Status = data.spot2.status || "ГРЕШКА";
                         if (currentUser) updateSpotStatus(2, spot2Status, spot2Distance);
                     }
+                    if (data.spot3) {
+                        spot3Distance = data.spot3.distance || -1;
+                        spot3Status = data.spot3.status || "СВОБОДНО";
+                        if (currentUser) updateSpotStatus(3, spot3Status, spot3Distance);
+                    }
+                    
                     if (map && parkingPolygons.length > 0 && currentUser) {
                         updateMapColors();
                     }
@@ -4198,7 +4472,7 @@
                 } else if (i === 1) {
                     fillColor = (currentUser && spot2Status === "ЗАЕТО") ? '#ea4335' : '#34a853';
                 } else {
-                    fillColor = '#34a853';
+                    fillColor = (currentUser && spot3Status === "ЗАЕТО") ? '#ea4335' : '#34a853';
                 }
                 
                 // Създаване на паркомястото
@@ -4229,9 +4503,10 @@
                 }).addTo(map);
                 
                 // Информация при клик
-                let statusText = spot1Status;
-                if (i === 1) statusText = spot2Status;
-                else if (i === 2) statusText = "СВОБОДНО";
+                let statusText;
+                if (i === 0) statusText = spot1Status;
+                else if (i === 1) statusText = spot2Status;
+                else statusText = spot3Status;
                 
                 const currentLang = document.body.getAttribute('data-lang') || 'bg';
                 
@@ -4257,6 +4532,9 @@
                 }
                 if (i === 1 && currentUser) {
                     popupContent += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><i class="fas fa-ruler"></i><strong>Разстояние:</strong> ' + spot2Distance + ' см</div>';
+                }
+                if (i === 2 && currentUser) {
+                    popupContent += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><i class="fas fa-ruler"></i><strong>Разстояние:</strong> ' + spot3Distance + ' см</div>';
                 }
                 
                 if (!currentUser) {
@@ -4522,6 +4800,23 @@
             }
         };
 
+        // ===== ФУНКЦИЯ ЗА УВЕДОМЛЕНИЯ =====
+        function showNotification(message, type = 'success') {
+            const notificationEl = document.getElementById('notification');
+            const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
+            
+            notificationEl.innerHTML = icon + ' ' + message;
+            notificationEl.className = `notification ${type} show`;
+            
+            // Скриване на уведомлението след 3 секунди
+            setTimeout(() => {
+                notificationEl.classList.add('hide');
+                setTimeout(() => {
+                    notificationEl.classList.remove('show', 'hide');
+                }, 300);
+            }, 3000);
+        }
+
         // ===== ФУНКЦИИ ЗА ТЕМА И ЕЗИК =====
         function toggleTheme() {
             document.body.classList.toggle('dark-theme');
@@ -4542,13 +4837,21 @@
             document.body.setAttribute('data-lang', lang);
             localStorage.setItem('language', lang);
             
+            // Актуализиране на placeholder на контактния textarea
+            const contactMessage = document.getElementById('contactMessage');
+            if (contactMessage) {
+                contactMessage.placeholder = lang === 'bg' ? 'Вашето съобщение...' : 'Your message...';
+            }
+            
             // Актуализиране на статусите на паркоместата според езика
             if (currentUser) {
                 updateSpotStatus(1, spot1Status, spot1Distance);
                 updateSpotStatus(2, spot2Status, spot2Distance);
+                updateSpotStatus(3, spot3Status, spot3Distance);
             } else {
                 updateSpotStatus(1, "ЗАРЕЖДАНЕ", -1);
                 updateSpotStatus(2, "ЗАРЕЖДАНЕ", -1);
+                updateSpotStatus(3, "СВОБОДНО", -1);
             }
             
             // Актуализиране на времето за последна актуализация
@@ -4680,11 +4983,18 @@
                             }
                             
                             if (pageId === 'admin' && isAdmin) {
+                                console.log('Навигация на админ панел, зареждаме потребители...');
+                                console.log('isAdmin:', isAdmin);
+                                console.log('currentUser:', currentUser ? currentUser.uid : 'няма');
                                 loadAllUsers();
                             }
                             
                             if (pageId === 'favorites' && currentUser) {
                                 displayFavorites();
+                            }
+                            
+                            if (pageId === 'profile' && currentUser) {
+                                loadUserProfile(currentUser.uid);
                             }
                         }
                     });
@@ -4800,15 +5110,78 @@
                 }
             });
             
-            contactForm.addEventListener('submit', function(e) {
+            contactForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const message = this.querySelector('textarea').value;
-                if (message.trim() !== '') {
-                    const currentLang = document.body.getAttribute('data-lang') || 'bg';
-                    alert(currentLang === 'bg' ? 'Вашето съобщение беше изпратено успешно!' : 'Your message was sent successfully!');
-                    this.querySelector('textarea').value = '';
-                    contactModal.classList.remove('active');
+                console.log('Contact form submitted');
+                
+                const contactMessage = document.getElementById('contactMessage');
+                const message = contactMessage.value.trim();
+                const currentLang = document.body.getAttribute('data-lang') || 'bg';
+                
+                console.log('Current user:', currentUser);
+                console.log('Message:', message);
+                
+                if (!currentUser) {
+                    showNotification(currentLang === 'bg' ? 'Моля, влезте в профила си, за да изпратите съобщение.' : 'Please log in to send a message.', 'error');
+                    return;
                 }
+                
+                if (!message) {
+                    console.log('Empty message');
+                    return;
+                }
+                
+                // Вземаме полное име или displayName от текущия потребител
+                let userName = currentUser.displayName;
+                
+                try {
+                    if (!userName) {
+                        // Опитваме да вземем fullName, firstName + lastName от профила в Firestore
+                        const doc = await db.collection('users').doc(currentUser.uid).get();
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            userName = userData.fullName || `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || currentUser.email;
+                        } else {
+                            userName = currentUser.email;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    userName = currentUser.email;
+                }
+                
+                if (!userName) userName = currentUser.email;
+                
+                // Генериране на текущото време
+                const now = new Date();
+                const time = now.toLocaleString(currentLang === 'bg' ? 'bg-BG' : 'en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+
+                const templateParams = {
+                    name: userName,
+                    email: currentUser.email,
+                    time: time,
+                    message: message
+                };
+                
+                console.log('Sending email with params:', templateParams);
+
+                emailjs.send('service_tocc10u', 'template_qqogumr', templateParams)
+                    .then(function(response) {
+                        console.log('Email sent successfully:', response);
+                        showNotification(currentLang === 'bg' ? 'Вашето съобщение беше изпратено успешно!' : 'Your message was sent successfully!', 'success');
+                        contactMessage.value = '';
+                        contactModal.classList.remove('active');
+                    }, function(error) {
+                        console.error('EmailJS error:', error);
+                        showNotification(currentLang === 'bg' ? 'Грешка при изпращане на съобщението. Опитайте отново.' : 'Error sending message. Please try again.', 'error');
+                    });
             });
             
             contactModal.addEventListener('click', function(e) {
