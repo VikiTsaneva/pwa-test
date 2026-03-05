@@ -251,17 +251,31 @@
             justify-content: space-between;
             align-items: center;
             transition: background-color 0.3s ease;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .header h1 {
             color: var(--primary);
             font-size: 1.8rem;
             transition: color 0.3s ease;
+            margin: 0;
+            flex: 0 0 auto;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+            min-width: 300px;
+            justify-content: flex-end;
         }
 
         .search-bar {
             display: flex;
             width: 300px;
+            gap: 0;
         }
 
         .search-bar input {
@@ -291,6 +305,36 @@
 
         .search-bar button:hover {
             background-color: var(--primary);
+        }
+
+        .install-btn {
+            padding: 10px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .install-btn:hover {
+            background: linear-gradient(135deg, var(--accent), #c73725);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .install-btn:active {
+            transform: translateY(0);
+        }
+
+        .install-btn.hidden {
+            display: none;
         }
 
         .content-area {
@@ -817,6 +861,67 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
+        /* Hidden navigation items */
+        .nav-item-hidden {
+            display: none;
+        }
+
+        /* Favorites login prompt */
+        .favorites-login-prompt {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        /* Lock icon styling */
+        .favorites-lock-icon {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Admin badge styling */
+        .profile-admin-badge {
+            display: none;
+            background: var(--admin-badge);
+            color: var(--admin-text);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-top: 5px;
+        }
+
+        /* Logout button styling */
+        .logout-profile-btn {
+            background: var(--accent);
+            margin-top: 10px;
+        }
+
+        /* Admin heading spacing */
+        .admin-heading {
+            margin-bottom: 20px;
+        }
+
+        /* Table loading text centering */
+        .table-loading {
+            text-align: center;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: var(--accent);
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Success message styling */
+        .success-message {
+            color: var(--success);
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
         /* Модален прозорец */
         .modal-overlay {
             display: none;
@@ -830,6 +935,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
         }
 
@@ -2753,7 +2859,7 @@
                     <span class="lang-bg">Профил</span>
                     <span class="lang-en">Profile</span>
                 </div>
-                <div class="nav-item" id="admin-nav-item" data-page="admin" style="display: none;">
+                <div class="nav-item nav-item-hidden" id="admin-nav-item" data-page="admin">
                     <i class="fas fa-users-cog"></i>
                     <span class="lang-bg">Админ</span>
                     <span class="lang-en">Admin</span>
@@ -2768,7 +2874,7 @@
                     <span class="lang-bg">Регистрация</span>
                     <span class="lang-en">Register</span>
                 </div>
-                <div class="nav-item" id="logout-nav-item" data-page="logout" style="display: none;">
+                <div class="nav-item nav-item-hidden" id="logout-nav-item" data-page="logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span class="lang-bg">Изход</span>
                     <span class="lang-en">Logout</span>
@@ -2796,10 +2902,17 @@
             <div class="header">
                 <h1 id="page-title" class="lang-bg">Карта</h1>
                 <h1 id="page-title" class="lang-en">Map</h1>
-                <div class="search-bar">
-                    <input type="text" id="search-input" class="lang-bg" placeholder="Търсене...">
-                    <input type="text" id="search-input" class="lang-en" placeholder="Search...">
-                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                <div class="header-controls">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" class="lang-bg" placeholder="Търсене...">
+                        <input type="text" id="search-input" class="lang-en" placeholder="Search...">
+                        <button id="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <button id="install-btn" class="install-btn" title="Инсталирай приложението">
+                        <i class="fas fa-download"></i>
+                        <span class="lang-bg">Инсталирай</span>
+                        <span class="lang-en">Install</span>
+                    </button>
                 </div>
             </div>
             
@@ -2949,8 +3062,8 @@
                     <h2 class="form-title lang-en"> Favorite Parking Lots</h2>
                     
                     <!-- Login prompt за любими -->
-                    <div id="favorites-login-prompt" style="display: none; text-align: center; padding: 50px 20px;">
-                        <i class="fas fa-lock" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                    <div id="favorites-login-prompt" class="favorites-login-prompt">
+                        <i class="fas fa-lock favorites-lock-icon"></i>
                         <p class="lang-bg">Моля, <a href="#" onclick="document.querySelector('[data-page=login]').click(); return false;">влезте</a> в профила си, за да видите любимите места.</p>
                         <p class="lang-en">Please <a href="#" onclick="document.querySelector('[data-page=login]').click(); return false;">login</a> to see your favorite spots.</p>
                     </div>
@@ -2972,7 +3085,7 @@
                                 <h2 id="profile-name-en" class="lang-en"></h2>
                                 <p><i class="fas fa-envelope"></i> <span id="profile-email"></span></p>
                                 <p><i class="fas fa-phone"></i> <span id="profile-phone">-</span></p>
-                                <p id="profile-admin-badge" style="display: none; background: var(--admin-badge); color: var(--admin-text); padding: 5px 10px; border-radius: 20px; margin-top: 5px;">
+                                <p id="profile-admin-badge" class="profile-admin-badge">
                                     <i class="fas fa-crown"></i> <span class="lang-bg">Администратор</span><span class="lang-en">Administrator</span>
                                 </p>
                             </div>
@@ -3018,7 +3131,7 @@
                                 <span class="lang-en">Edit</span>
                             </button>
                             
-                            <button class="edit-profile-btn" id="logoutProfileBtn" style="background: var(--accent); margin-top: 10px;">
+                            <button class="edit-profile-btn logout-profile-btn" id="logoutProfileBtn">
                                 <i class="fas fa-sign-out-alt"></i>
                                 <span class="lang-bg">Изход</span>
                                 <span class="lang-en">Logout</span>
@@ -3073,8 +3186,8 @@
                 <!-- Админ панел -->
                 <div id="admin-page" class="page">
                     <div class="admin-container">
-                        <h2 class="lang-bg" style="margin-bottom: 20px;"> Администраторско табло</h2>
-                        <h2 class="lang-en" style="margin-bottom: 20px;"> Admin Dashboard</h2>
+                        <h2 class="lang-bg admin-heading"> Администраторско табло</h2>
+                        <h2 class="lang-en admin-heading"> Admin Dashboard</h2>
                         
                         <div class="admin-stats">
                             <div class="admin-stat-card">
@@ -3135,7 +3248,7 @@
                                 </thead>
                                 <tbody id="adminUsersTableBody">
                                     <tr>
-                                        <td colspan="9" style="text-align: center;">Зареждане...</td>
+                                        <td colspan="9" class="table-loading">Зареждане...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -3196,8 +3309,8 @@
                                     <a href="#" onclick="document.querySelector('[data-page=register]').click(); return false;" class="lang-en">Register</a>
                                 </div>
                                 
-                                <div id="login-error" style="color: var(--accent); text-align: center; margin-top: 10px; display: none;"></div>
-                                <div id="login-success" style="color: var(--success); text-align: center; margin-top: 10px; display: none;"></div>
+                                <div id="login-error" class="error-message"></div>
+                                <div id="login-success" class="success-message"></div>
                             </form>
                         </div>
                     </div>
@@ -3282,8 +3395,8 @@
                                     <a href="#" onclick="document.querySelector('[data-page=login]').click(); return false;" class="lang-en">Login</a>
                                 </div>
                                 
-                                <div id="register-error" style="color: var(--accent); text-align: center; margin-top: 10px; display: none;"></div>
-                                <div id="register-success" style="color: var(--success); text-align: center; margin-top: 10px; display: none;"></div>
+                                <div id="register-error" class="error-message"></div>
+                                <div id="register-success" class="success-message"></div>
                             </form>
                         </div>
                     </div>
@@ -3434,32 +3547,45 @@
         ];
         
         // ===== PWA Инсталация =====
-        let deferredPrompt;
-        const installBanner = document.getElementById('installBanner');
-        const installBtn = document.getElementById('installBtn');
-        const closeInstallBanner = document.getElementById('closeInstallBanner');
+        let deferredPromptPWA;
+        const installButtonElement = document.getElementById('install-btn');
 
-        if (!localStorage.getItem('installBannerClosed')) {
-            window.addEventListener('beforeinstallprompt', (e) => {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPromptPWA = e;
+            
+            if (installButtonElement) {
+                installButtonElement.classList.remove('hidden');
+            }
+        });
+
+        if (installButtonElement) {
+            installButtonElement.addEventListener('click', async (e) => {
                 e.preventDefault();
-                deferredPrompt = e;
-                installBanner.style.display = 'flex';
+                
+                if (deferredPromptPWA) {
+                    deferredPromptPWA.prompt();
+                    const { outcome } = await deferredPromptPWA.userChoice;
+                    
+                    if (outcome === 'accepted') {
+                        console.log('Приложението беше инсталирано');
+                    }
+                    
+                    deferredPromptPWA = null;
+                    if (installButtonElement) {
+                        installButtonElement.classList.add('hidden');
+                    }
+                }
+            });
+
+            window.addEventListener('appinstalled', () => {
+                console.log('PWA инсталирана');
+                if (installButtonElement) {
+                    installButtonElement.classList.add('hidden');
+                }
+                deferredPromptPWA = null;
             });
         }
-
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`Потребителски избор: ${outcome}`);
-            deferredPrompt = null;
-            installBanner.style.display = 'none';
-        });
-
-        closeInstallBanner.addEventListener('click', () => {
-            installBanner.style.display = 'none';
-            localStorage.setItem('installBannerClosed', 'true');
-        });
 
         window.addEventListener('online', () => document.body.classList.remove('offline'));
         window.addEventListener('offline', () => document.body.classList.add('offline'));
@@ -5201,7 +5327,7 @@
                 }
             });
         });
-        
+
         console.log("Система за мониторинг на паркинг места - Габрово");
         console.log("Използва два Firebase проекта:");
         console.log("- Authentication & Firestore: registration-88c86");
