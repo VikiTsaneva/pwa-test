@@ -4,7 +4,7 @@
 
 // ===== HC-SR04 пинове =====
 #define TRIG_PIN_1 5
-#define ECHO_PIN_1 18   // ⚠️ Разкачи при upload, ако се получават Write timeout
+#define ECHO_PIN_1 18   
 
 #define TRIG_PIN_2 21
 #define ECHO_PIN_2 19
